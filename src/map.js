@@ -1,6 +1,9 @@
 import React, { useEffect, useRef } from "react";
 import { Helmet } from "react-helmet";
-import L from "leaflet";
+import L, { icon } from "leaflet";
+import betaLogo from "./images/beta_air_llc_logo.png"; // with import
+import { OPENSKY_CREDENTIALS } from "./config/config";
+import "leaflet-rotatedmarker";
 
 const MapPage = () => {
   const mapRef = useRef(null); // Reference for Leaflet map instance
@@ -21,6 +24,9 @@ const MapPage = () => {
 
     const fetchPlaneData = async () => {
       try {
+        const { username, password } = OPENSKY_CREDENTIALS;
+        const credentials = btoa(`${username}:${password}`); // Base64 encode credentials
+
         // Vermont bounding box
         const lamin = 42.7;
         const lamax = 45.0;
@@ -29,11 +35,15 @@ const MapPage = () => {
 
         // Fetch live plane data for Vermont's bounding box
         const response = await fetch(
-          `https://opensky-network.org/api/states/all?lamin=${lamin}&lomin=${lomin}&lamax=${lamax}&lomax=${lomax}`
+          `https://opensky-network.org/api/states/all?lamin=${lamin}&lomin=${lomin}&lamax=${lamax}&lomax=${lomax}`,
+          {
+            headers: {
+              Authorization: `Basic ${credentials}`,
+            },
+          }
         );
         if (!response.ok) {
-          console.error("Failed to fetch plane data");
-          return;
+          throw new Error(`Error: ${response.status} - ${response.statusText}`);
         }
 
         const data = await response.json();
@@ -47,7 +57,6 @@ const MapPage = () => {
         // Add markers for planes in the bounding box
         const { states } = data; // Extract planes' states
         if (states) {
-          console.log(states);
           states.forEach((plane) => {
             const [
               icao,
@@ -59,7 +68,7 @@ const MapPage = () => {
               latitude,
               ,
               ,
-              ,
+              true_track,
               ,
               ,
               ,
@@ -69,9 +78,25 @@ const MapPage = () => {
               ,
             ] = plane;
             if (latitude && longitude) {
-              const marker = L.marker([latitude, longitude])
+              console.log(true_track);
+
+              const greenIcon = L.icon({
+                iconUrl: betaLogo,
+                iconSize: [168, 130], // size of the icon
+                iconAnchor: [84, 65], // point of the icon which will correspond to marker's location
+              });
+
+              // Use L.marker and the plugin's rotation support
+              const marker = L.marker([latitude, longitude], {
+                icon: greenIcon,
+              })
                 .addTo(mapRef.current)
                 .bindPopup(`Callsign: ${callsign || "N/A"}<br>ICAO: ${icao}`);
+
+              // Set rotation angle
+              marker.setRotationAngle(-true_track || 0);
+              marker.setRotationOrigin("center");
+
               markersRef.current.push(marker);
             }
           });
@@ -83,7 +108,7 @@ const MapPage = () => {
 
     // Fetch data immediately and set up an interval to refresh every minute
     fetchPlaneData();
-    const intervalId = setInterval(fetchPlaneData, 10000);
+    const intervalId = setInterval(fetchPlaneData, 30000);
 
     // Clean up the interval on component unmount
     return () => clearInterval(intervalId);
