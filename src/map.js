@@ -1,21 +1,23 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Helmet } from "react-helmet";
-import L, { icon } from "leaflet";
-import betaLogo from "./images/beta_air_llc_logo.png"; // with import
+import L from "leaflet";
+import betaLogo from "./images/beta_air_llc_logo.png";
 import { OPENSKY_CREDENTIALS } from "./config/config";
 import "leaflet-rotatedmarker";
+import { Box, Paper, Typography } from "@mui/material";
 
 const MapPage = () => {
-  const mapRef = useRef(null); // Reference for Leaflet map instance
-  const markersRef = useRef([]); // Reference to hold marker instances
+  const mapRef = useRef(null);
+  const markersRef = useRef([]);
+  const [selectedMarker, setSelectedMarker] = useState(null);
+  const [selectedCallsign, setSelectedCallsign] = useState(null);
+  const [timeDifference, setTimeDifference] = useState(null);
 
   useEffect(() => {
     if (!mapRef.current) {
-      // Initialize the map
-      const mapInstance = L.map("map").setView([44.0, -72.7], 8); // Centered on Vermont
+      const mapInstance = L.map("map").setView([44.0, -72.7], 8);
       mapRef.current = mapInstance;
 
-      // Add a tile layer
       L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
         attribution:
           '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
@@ -25,15 +27,13 @@ const MapPage = () => {
     const fetchPlaneData = async () => {
       try {
         const { username, password } = OPENSKY_CREDENTIALS;
-        const credentials = btoa(`${username}:${password}`); // Base64 encode credentials
+        const credentials = btoa(`${username}:${password}`);
 
-        // Vermont bounding box
         const lamin = 42.7;
         const lamax = 45.0;
         const lomin = -73.4377;
         const lomax = -71.4657;
 
-        // Fetch live plane data for Vermont's bounding box
         const response = await fetch(
           `https://opensky-network.org/api/states/all?lamin=${lamin}&lomin=${lomin}&lamax=${lamax}&lomax=${lomax}`,
           {
@@ -48,74 +48,135 @@ const MapPage = () => {
 
         const data = await response.json();
 
-        // Clear existing markers
+        // Remove previous markers
         markersRef.current.forEach((marker) =>
           mapRef.current.removeLayer(marker)
         );
         markersRef.current = [];
 
-        // Add markers for planes in the bounding box
-        const { states } = data; // Extract planes' states
+        const { states } = data;
+        let updatedSelectedMarker = null;
+
         if (states) {
           states.forEach((plane) => {
             const [
               icao,
               callsign,
-              ,
-              ,
-              ,
+              origin_country,
+              time_position,
+              last_contact,
               longitude,
               latitude,
-              ,
-              ,
+              baro_altitude,
+              on_ground,
+              velocity,
               true_track,
-              ,
-              ,
-              ,
-              ,
-              ,
-              ,
-              ,
+              vertical_rate,
+              sensors,
+              geo_altitude,
+              squawk,
+              spi,
+              position_source,
+              category,
             ] = plane;
-            if (latitude && longitude) {
-              console.log(true_track);
 
+            if (latitude && longitude) {
               const greenIcon = L.icon({
                 iconUrl: betaLogo,
-                iconSize: [168, 130], // size of the icon
-                iconAnchor: [84, 65], // point of the icon which will correspond to marker's location
+                iconSize: [84, 65],
+                iconAnchor: [42, 32.5],
               });
 
-              // Use L.marker and the plugin's rotation support
               const marker = L.marker([latitude, longitude], {
                 icon: greenIcon,
-              })
-                .addTo(mapRef.current)
-                .bindPopup(`Callsign: ${callsign || "N/A"}<br>ICAO: ${icao}`);
+              }).addTo(mapRef.current);
 
-              // Set rotation angle
-              marker.setRotationAngle(-true_track || 0);
+              marker.on("click", () => {
+                mapRef.current.setView([latitude, longitude], 12);
+                setSelectedMarker({
+                  icao,
+                  callsign,
+                  origin_country,
+                  time_position,
+                  last_contact,
+                  longitude,
+                  latitude,
+                  baro_altitude,
+                  on_ground,
+                  velocity,
+                  true_track,
+                  vertical_rate,
+                  sensors,
+                  geo_altitude,
+                  squawk,
+                  spi,
+                  position_source,
+                  category,
+                });
+                setSelectedCallsign(callsign);
+              });
+
+              marker.setRotationAngle(true_track || 0);
               marker.setRotationOrigin("center");
 
               markersRef.current.push(marker);
+
+              // If the marker matches the previously selected callsign, track it
+              if (callsign === selectedCallsign) {
+                updatedSelectedMarker = {
+                  icao,
+                  callsign,
+                  origin_country,
+                  time_position,
+                  last_contact,
+                  longitude,
+                  latitude,
+                  baro_altitude,
+                  on_ground,
+                  velocity,
+                  true_track,
+                  vertical_rate,
+                  sensors,
+                  geo_altitude,
+                  squawk,
+                  spi,
+                  position_source,
+                  category,
+                };
+                mapRef.current.setView([latitude, longitude], 12);
+              }
             }
           });
+        }
+
+        // Update the selected marker to the updated data if found
+        if (updatedSelectedMarker) {
+          setSelectedMarker(updatedSelectedMarker);
         }
       } catch (error) {
         console.error("Error fetching or processing plane data:", error);
       }
     };
 
-    // Fetch data immediately and set up an interval to refresh every minute
     fetchPlaneData();
     const intervalId = setInterval(fetchPlaneData, 30000);
 
-    // Clean up the interval on component unmount
     return () => clearInterval(intervalId);
-  }, []);
+  }, [selectedCallsign]);
+
+  useEffect(() => {
+    if (selectedMarker) {
+      const interval = setInterval(() => {
+        const currentUnixTime = Math.floor(Date.now() / 1000);
+        setTimeDifference(currentUnixTime - selectedMarker.last_contact);
+      }, 1000);
+
+      return () => clearInterval(interval);
+    }
+  }, [selectedMarker]);
 
   return (
-    <div style={{ height: "100vh", width: "100vw" }}>
+    <div style={{ height: "100vh", width: "100vw", position: "relative" }}>
       <Helmet>
         <link
           rel="stylesheet"
@@ -130,6 +191,35 @@ const MapPage = () => {
         ></script>
       </Helmet>
       <div id="map" style={{ height: "100%", width: "100%" }}></div>
+
+      {selectedMarker && (
+        <Paper
+          style={{
+            position: "fixed",
+            top: "50%",
+            left: "40%",
+            transform: "translate(-50%, -50%)",
+            zIndex: 1000,
+            padding: "20px",
+            maxWidth: "300px",
+          }}
+          elevation={4}
+        >
+          <Typography variant="h6">
+            Callsign: {selectedMarker.callsign || "N/A"}
+          </Typography>
+          <Typography variant="body2">ICAO: {selectedMarker.icao}</Typography>
+          <Typography variant="body2">
+            Time since last contact: {timeDifference} seconds
+          </Typography>
+          <Typography variant="body2">
+            Baro Altitude: {selectedMarker.baro_altitude}
+          </Typography>
+          <Typography variant="body2">
+            Velocity: {selectedMarker.velocity}
+          </Typography>
+        </Paper>
+      )}
     </div>
   );
 };
