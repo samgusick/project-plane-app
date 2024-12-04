@@ -4,7 +4,14 @@ import L from "leaflet";
 import betaLogo from "./images/beta_air_llc_logo.png";
 import { OPENSKY_CREDENTIALS } from "./config/config";
 import "leaflet-rotatedmarker";
-import { Box, Paper, Typography } from "@mui/material";
+import { Avatar, Box, ListItemText, Paper, Typography } from "@mui/material";
+import IconButton from "@mui/material/IconButton";
+import AddBoxIcon from "@mui/icons-material/AddBox";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemAvatar from "@mui/material/ListItemAvatar";
+import ImageIcon from "@mui/icons-material/Image";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 const MapPage = () => {
   const mapRef = useRef(null);
@@ -12,6 +19,7 @@ const MapPage = () => {
   const [selectedMarker, setSelectedMarker] = useState(null);
   const [selectedCallsign, setSelectedCallsign] = useState(null);
   const [timeDifference, setTimeDifference] = useState(null);
+  const [pinnedFlights, setPinnedFlights] = useState([]);
 
   useEffect(() => {
     if (!mapRef.current) {
@@ -145,6 +153,19 @@ const MapPage = () => {
                 };
                 mapRef.current.setView([latitude, longitude], 12);
               }
+
+              // Update pinned flights if callsign exists
+              setPinnedFlights((prevPinnedFlights) => {
+                return prevPinnedFlights.map((flight) =>
+                  flight.callsign === callsign
+                    ? {
+                        ...flight,
+                        baro_altitude,
+                        velocity,
+                      }
+                    : flight
+                );
+              });
             }
           });
         }
@@ -192,12 +213,57 @@ const MapPage = () => {
       </Helmet>
       <div id="map" style={{ height: "100%", width: "100%" }}></div>
 
+      <Paper
+        style={{
+          position: "fixed",
+          top: "20%",
+          left: "10%",
+          transform: "translate(-50%, -50%)",
+          zIndex: 1000,
+          padding: "20px",
+          maxWidth: "300px",
+        }}
+        elevation={4}
+      >
+        <Typography variant="h6">Pinned Flights</Typography>
+        <List>
+          {pinnedFlights.length > 0 &&
+            pinnedFlights.map((flight) => (
+              <ListItem key={flight.callsign}>
+                <ListItemAvatar>
+                  <Avatar>
+                    <ImageIcon />
+                  </Avatar>
+                </ListItemAvatar>
+                <ListItemText
+                  primary={flight.callsign}
+                  secondary={`Altitude: ${flight.baro_altitude}`}
+                ></ListItemText>
+                <IconButton
+                  edge="end"
+                  aria-label="delete"
+                  onClick={() => {
+                    // Remove the flight with the matching callsign
+                    setPinnedFlights((prevPinnedFlights) =>
+                      prevPinnedFlights.filter(
+                        (item) => item.callsign !== flight.callsign // Ensure you're comparing callsigns correctly
+                      )
+                    );
+                  }}
+                >
+                  <DeleteIcon />
+                </IconButton>
+              </ListItem>
+            ))}
+        </List>
+      </Paper>
+
       {selectedMarker && (
         <Paper
           style={{
             position: "fixed",
             top: "50%",
-            left: "40%",
+            left: "60%",
             transform: "translate(-50%, -50%)",
             zIndex: 1000,
             padding: "20px",
@@ -208,15 +274,33 @@ const MapPage = () => {
           <Typography variant="h6">
             Callsign: {selectedMarker.callsign || "N/A"}
           </Typography>
+          <IconButton
+            aria-label="add"
+            onClick={() => {
+              !pinnedFlights.some(
+                (flight) => flight.callsign === selectedMarker.callsign
+              ) &&
+                setPinnedFlights((prevPinnedFlights) => [
+                  ...prevPinnedFlights,
+                  {
+                    callsign: selectedMarker.callsign,
+                    baro_altitude: selectedMarker.baro_altitude,
+                    velocity: selectedMarker.velocity,
+                  },
+                ]);
+            }}
+          >
+            <AddBoxIcon />
+          </IconButton>
           <Typography variant="body2">ICAO: {selectedMarker.icao}</Typography>
           <Typography variant="body2">
-            Time since last contact: {timeDifference} seconds
+            Time since last contact: {timeDifference}s
           </Typography>
           <Typography variant="body2">
-            Baro Altitude: {selectedMarker.baro_altitude}
+            Barometric Altitude: {selectedMarker.baro_altitude} m
           </Typography>
           <Typography variant="body2">
-            Velocity: {selectedMarker.velocity}
+            Velocity: {selectedMarker.velocity} m/s
           </Typography>
         </Paper>
       )}
