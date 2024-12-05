@@ -10,15 +10,25 @@ const Map = ({
   setPinnedFlights,
   selectedCallsign,
   pinnedFlights,
+  mapRef
 }) => {
-  const mapRef = useRef(null);
   const markersRef = useRef([]);
 
   useEffect(() => {
     if (!mapRef.current) {
-      const mapInstance = L.map("map").setView([44.0, -72.7], 8);
+      const mapInstance = L.map("map", {
+        center: [44.0, -72.7],
+        zoom: 8,
+        dragging: false,
+        doubleClickZoom: false,
+        zoomControl: false,
+        scrollWheelZoom: false
+      }
+      );
       mapRef.current = mapInstance;
 
+
+  
       L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
         attribution:
           '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
@@ -92,6 +102,12 @@ const Map = ({
               const marker = L.marker([latitude, longitude], {
                 icon: greenIcon,
               }).addTo(mapRef.current);
+              
+              mapRef.current.on("click", () => {
+                mapRef.current.setView([44.0, -72.7], 8);
+                setSelectedMarker(null);
+                setSelectedCallsign(null);
+              });
 
               marker.on("click", () => {
                 mapRef.current.setView([latitude, longitude], 12);
@@ -200,6 +216,7 @@ const Map = ({
     setPinnedFlights,
     setSelectedCallsign,
     setSelectedMarker,
+    mapRef
   ]);
 
   return <div id="map" style={{ height: "100%", width: "100%" }} />;

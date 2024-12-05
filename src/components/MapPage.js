@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Helmet } from "react-helmet";
 import Map from "./Map";
+import L from "leaflet";
 import PinnedFlightsList from "./PinnedFlightsList";
 import FlightDetails from "./FlightDetails";
 
@@ -8,6 +9,44 @@ const MapPage = () => {
   const [selectedMarker, setSelectedMarker] = useState(null);
   const [selectedCallsign, setSelectedCallsign] = useState(null);
   const [pinnedFlights, setPinnedFlights] = useState([]);
+  const mapRef = useRef(null);
+
+  useEffect(() => {
+    if (!mapRef.current) {
+      const mapInstance = L.map("map", {
+        center: [44.0, -72.7],
+        zoom: 8,
+        dragging: false,
+        doubleClickZoom: false,
+        zoomControl: false,
+        scrollWheelZoom: false
+      }
+      );
+      mapRef.current = mapInstance;
+
+
+  
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        attribution:
+          '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+      }).addTo(mapInstance);
+    }
+  });
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (mapRef.current && selectedMarker) {
+        mapRef.current.setView([selectedMarker.latitude, selectedMarker.longitude], 12)
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    // Cleanup the event listener when the component unmounts
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [mapRef, selectedMarker]);
 
   return (
     <div style={{ height: "100vh", width: "100vw", position: "relative" }}>
@@ -30,15 +69,19 @@ const MapPage = () => {
         setPinnedFlights={setPinnedFlights}
         selectedCallsign={selectedCallsign}
         pinnedFlights={pinnedFlights}
+        mapRef={mapRef}
       />
       <PinnedFlightsList
         pinnedFlights={pinnedFlights}
         setPinnedFlights={setPinnedFlights}
       />
       <FlightDetails
+        setSelectedMarker={setSelectedMarker}
+        setSelectedCallsign={setSelectedCallsign}
         selectedMarker={selectedMarker}
         setPinnedFlights={setPinnedFlights}
         pinnedFlights={pinnedFlights}
+        mapRef={mapRef}
       />
     </div>
   );
