@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
+import TwoColumnList from "./TwoColumnList";
 
 export function PinnedFlightsAccordion({ setPinnedFlights, flight }) {
   return (
@@ -20,36 +21,29 @@ export function PinnedFlightsAccordion({ setPinnedFlights, flight }) {
         id="panel1bh-header"
       >
         <Typography>
-        <IconButton sx={{padding: 0}}
-
-        onClick={() => {
-          setPinnedFlights((prevPinnedFlights) =>
-            prevPinnedFlights.filter((item) => item.callsign !== flight.callsign)
-          );
-        }}
-      >
-        <DeleteIcon />
-      </IconButton>
+          <IconButton
+            sx={{ padding: 0 }}
+            onClick={() => {
+              setPinnedFlights((prevPinnedFlights) =>
+                prevPinnedFlights.filter(
+                  (item) => item.callsign !== flight.callsign
+                )
+              );
+            }}
+          >
+            <DeleteIcon />
+          </IconButton>
         </Typography>
         <Typography sx={{ width: "33%", flexShrink: 0 }}>
-          {flight.callsign}
+          Aircraft {flight.icao}
         </Typography>
         <Typography sx={{ color: "text.secondary" }}>
           {flight.origin_country}
         </Typography>
       </AccordionSummary>
 
-
-      <AccordionDetails style={{ maxHeight: "400px", overflowY: "auto" }}>
-        <List>
-          {Object.entries(flight).map(([key, value], index) => (
-            <ListItemText
-              key={index}
-              primary={`${key.toUpperCase().replace('_', ' ')}:`}
-              secondary={`${value}`}
-            />
-          ))}
-        </List>
+      <AccordionDetails>
+        <TwoColumnList marker={flight}></TwoColumnList>
       </AccordionDetails>
     </Accordion>
   );

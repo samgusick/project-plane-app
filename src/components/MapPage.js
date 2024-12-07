@@ -9,7 +9,23 @@ const MapPage = () => {
   const [selectedMarker, setSelectedMarker] = useState(null);
   const [selectedCallsign, setSelectedCallsign] = useState(null);
   const [pinnedFlights, setPinnedFlights] = useState([]);
+
   const mapRef = useRef(null);
+
+
+    /**
+   * Resets the map view and nullifies the selected marker 
+   * and the stored call sign value for tracking which marker is selected.
+   * 
+   * @param {string} endpoint - The API endpoint to fetch data from.
+   * @param {Object} options - Fetch options (e.g., headers, method).
+   * @returns {Promise<Object>} The data fetched from the API.
+   */
+  const resetMapView = () => {
+    setSelectedCallsign(null);
+    setSelectedMarker(null);
+    mapRef.current.setView([44.0, -72.7], 8);
+  };
 
   useEffect(() => {
     if (!mapRef.current) {
@@ -47,6 +63,7 @@ const MapPage = () => {
       window.removeEventListener('resize', handleResize);
     };
   }, [mapRef, selectedMarker]);
+  
 
   return (
     <div style={{ height: "100vh", width: "100vw", position: "relative" }}>
@@ -64,12 +81,14 @@ const MapPage = () => {
         ></script>
       </Helmet>
       <Map
+        selectedMarker={selectedMarker}
         setSelectedMarker={setSelectedMarker}
         setSelectedCallsign={setSelectedCallsign}
         setPinnedFlights={setPinnedFlights}
         selectedCallsign={selectedCallsign}
         pinnedFlights={pinnedFlights}
         mapRef={mapRef}
+        resetMapView={resetMapView}
       />
       <PinnedFlightsList
         pinnedFlights={pinnedFlights}

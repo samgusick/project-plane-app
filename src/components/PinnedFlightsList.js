@@ -23,7 +23,7 @@ const PinnedFlightsList = ({ pinnedFlights, setPinnedFlights }) => {
       style={{
         position: "fixed",
         top: "50px",
-        left: "50px",
+        right: "50px",
         zIndex: 1000,
         padding: "20px",
         minWidth: "300px",

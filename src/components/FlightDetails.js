@@ -3,25 +3,25 @@ import { Paper, IconButton } from "@mui/material";
 import AddBoxIcon from "@mui/icons-material/AddBox";
 import CloseIcon from "@mui/icons-material/Close";
 import TwoColumnList from "./TwoColumnList";
+import PushPinIcon from "@mui/icons-material/PushPin";
 
-const FlightDetails = ({ setSelectedMarker, setSelectedCallsign, selectedMarker, pinnedFlights, setPinnedFlights, mapRef}) => {
+const FlightDetails = ({
+  setSelectedMarker,
+  setSelectedCallsign,
+  selectedMarker,
+  pinnedFlights,
+  setPinnedFlights,
+  mapRef,
+}) => {
   const [timeDifference, setTimeDifference] = useState(null);
   const [markerActive, setMarkerActive] = useState(true);
 
-  useEffect(() => {
-    if (selectedMarker) {
-      setMarkerActive(true); // Reactivate the marker when a new one is selected
-      const interval = setInterval(() => {
-        const currentUnixTime = Math.floor(Date.now() / 1000);
-        setTimeDifference(currentUnixTime - selectedMarker.last_contact);
-      }, 1000);
-
-      return () => clearInterval(interval);
-    }
-  }, [selectedMarker]);
-
   const handleAddToPinnedFlights = () => {
-    if (!pinnedFlights.some((flight) => flight.callsign === selectedMarker.callsign)) {
+    if (
+      !pinnedFlights.some(
+        (flight) => flight.callsign === selectedMarker.callsign
+      )
+    ) {
       setPinnedFlights((prev) => [...prev, selectedMarker]);
     }
   };
@@ -38,21 +38,29 @@ const FlightDetails = ({ setSelectedMarker, setSelectedCallsign, selectedMarker,
       <Paper
         style={{
           position: "fixed",
-          top: "50px",
-          right: "50px",
+          bottom: "50px",
+          left: "50px",
           zIndex: 1000,
           padding: "20px",
           maxWidth: "300px",
         }}
         elevation={4}
       >
-        <IconButton onClick={handleClose}>
+        <h1>{`Aircraft ${selectedMarker.icao}`}</h1>
+        <IconButton
+          aria-label="add"
+          onClick={handleAddToPinnedFlights}
+          sx={{ position: "absolute", top: 8, left: 8 }}
+        >
+          <PushPinIcon />
+        </IconButton>
+        <IconButton
+          onClick={handleClose}
+          sx={{ position: "absolute", top: 8, right: 8 }}
+        >
           <CloseIcon />
         </IconButton>
-        <IconButton aria-label="add" onClick={handleAddToPinnedFlights}>
-          <AddBoxIcon />
-        </IconButton>
-        <TwoColumnList selectedMarker={selectedMarker} />
+        <TwoColumnList marker={selectedMarker} />
       </Paper>
     )
   );

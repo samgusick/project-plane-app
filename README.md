@@ -19,12 +19,14 @@ Planes Over Vermont is a simple interface and dashboard application for viewing 
 - [ x ] restrict use of the leaflet map so when the user clicks on a plane it zooms into that and tracks it, but if the user deselects the map should default to the view of Vermont without drag/zoomability
 - [ x ] Add/remove flights from the pinned flights list
 - [ x ] populate plane data in a dropdown accordion for easy detailed viewing of flight info
-- [ ] Tidy up pinned flight details so there's less content overflow
-- [ ] Tidy up pinned flight details cosmetically to improve labels, visual appeal, aesthetics and make the data more informed 
-- [ ] Replace pin icon with a better one on the flight details popup
-- [ ] Properly style both buttons on top of the flight details popup
+- [ x ] Tidy up pinned flight details so there's less content overflow
+-  [ x ] Tidy up pinned flight details cosmetically to improve labels, visual appeal, aesthetics and make the data more informed 
+- [ x ] Replace pin icon with a better one on the flight details popup
+- [ x ] Properly style both buttons on top of the flight details popup
 - [ ] Add a button option on the pinned flights to optionally pan the map over to the selected plane
 - [ ] create option on the plane data pop up for users to add notes
+- [ x ] plane should be deselected if it flys out of range
+- [ ] create proper boundaries for Vermont with the planes
 
 ## STRETCH GOALS
 
