@@ -1,30 +1,25 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Helmet } from "react-helmet";
-import Map from "./Map";
 import L from "leaflet";
+import Map from "./Map";
 import PinnedFlightsList from "./PinnedFlightsList";
-import FlightDetails from "./FlightDetails";
+import SelectedFlightPanel from "./SelectedFlightPanel/SelectedFlightPanel";
+import ErrorPopup from "./ErrorPopup";
 
 const MapPage = () => {
   const [selectedMarker, setSelectedMarker] = useState(null);
   const [selectedCallsign, setSelectedCallsign] = useState(null);
   const [pinnedFlights, setPinnedFlights] = useState([]);
+  const [loadFlights, setLoadFlights] = useState(true);
 
   const mapRef = useRef(null);
 
-
-    /**
-   * Resets the map view and nullifies the selected marker 
-   * and the stored call sign value for tracking which marker is selected.
-   * 
-   * @param {string} endpoint - The API endpoint to fetch data from.
-   * @param {Object} options - Fetch options (e.g., headers, method).
-   * @returns {Promise<Object>} The data fetched from the API.
-   */
   const resetMapView = () => {
-    setSelectedCallsign(null);
-    setSelectedMarker(null);
-    mapRef.current.setView([44.0, -72.7], 8);
+    if (mapRef.current) {
+      setSelectedCallsign(null);
+      setSelectedMarker(null);
+      mapRef.current.setView([44.0, -72.7], 8);
+    }
   };
 
   useEffect(() => {
@@ -35,35 +30,33 @@ const MapPage = () => {
         dragging: false,
         doubleClickZoom: false,
         zoomControl: false,
-        scrollWheelZoom: false
-      }
-      );
+        scrollWheelZoom: false,
+      });
       mapRef.current = mapInstance;
 
-
-  
       L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
         attribution:
           '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
       }).addTo(mapInstance);
     }
-  });
+  }, []);
 
   useEffect(() => {
     const handleResize = () => {
       if (mapRef.current && selectedMarker) {
-        mapRef.current.setView([selectedMarker.latitude, selectedMarker.longitude], 12)
+        mapRef.current.setView(
+          [selectedMarker.latitude, selectedMarker.longitude],
+          12
+        );
       }
     };
 
-    window.addEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
 
-    // Cleanup the event listener when the component unmounts
     return () => {
-      window.removeEventListener('resize', handleResize);
+      window.removeEventListener("resize", handleResize);
     };
-  }, [mapRef, selectedMarker]);
-  
+  }, [selectedMarker]);
 
   return (
     <div style={{ height: "100vh", width: "100vw", position: "relative" }}>
@@ -85,6 +78,8 @@ const MapPage = () => {
         setSelectedMarker={setSelectedMarker}
         setSelectedCallsign={setSelectedCallsign}
         setPinnedFlights={setPinnedFlights}
+        setLoadFlights={setLoadFlights}
+        loadFlights={loadFlights}
         selectedCallsign={selectedCallsign}
         pinnedFlights={pinnedFlights}
         mapRef={mapRef}
@@ -94,7 +89,7 @@ const MapPage = () => {
         pinnedFlights={pinnedFlights}
         setPinnedFlights={setPinnedFlights}
       />
-      <FlightDetails
+      <SelectedFlightPanel
         setSelectedMarker={setSelectedMarker}
         setSelectedCallsign={setSelectedCallsign}
         selectedMarker={selectedMarker}
@@ -102,6 +97,7 @@ const MapPage = () => {
         pinnedFlights={pinnedFlights}
         mapRef={mapRef}
       />
+      {!loadFlights && <ErrorPopup />}
     </div>
   );
 };

@@ -51,7 +51,15 @@ const MapPage = () => {
           }
         );
         if (!response.ok) {
-          throw new Error(`Error: ${response.status} - ${response.statusText}`);
+          // throw new Error(`Error: ${response.status} - ${response.statusText}`);
+          return (() => {
+            <h1>
+              Failed to reach API
+            </h1>
+          });
+        } else {
+
+          
         }
 
         const data = await response.json();
@@ -151,7 +159,7 @@ const MapPage = () => {
                   position_source,
                   category,
                 };
-                mapRef.current.setView([latitude, longitude], 12);
+                // mapRef.current.setView([latitude, longitude], 12);
               }
 
               // Update pinned flights if callsign exists

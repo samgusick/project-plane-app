@@ -24,9 +24,10 @@ Planes Over Vermont is a simple interface and dashboard application for viewing 
 - [ x ] Replace pin icon with a better one on the flight details popup
 - [ x ] Properly style both buttons on top of the flight details popup
 - [ ] Add a button option on the pinned flights to optionally pan the map over to the selected plane
-- [ ] create option on the plane data pop up for users to add notes
+- [ x ] create option on the plane data pop up for users to add notes
 - [ x ] plane should be deselected if it flys out of range
 - [ ] create proper boundaries for Vermont with the planes
+- [ x ] Error Handling for failing to reach the API
 
 ## STRETCH GOALS
 

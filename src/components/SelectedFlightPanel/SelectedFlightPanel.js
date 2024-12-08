@@ -1,11 +1,11 @@
+import { PanelHeader } from "../PanelHeader";
+import { PinSelectedFlight } from "./PinSelectedFlight";
 import React, { useEffect, useState } from "react";
-import { Paper, IconButton } from "@mui/material";
-import AddBoxIcon from "@mui/icons-material/AddBox";
-import CloseIcon from "@mui/icons-material/Close";
-import TwoColumnList from "./TwoColumnList";
-import PushPinIcon from "@mui/icons-material/PushPin";
+import { Paper } from "@mui/material";
+import FlightDetails from "./FlightDetails/FlightDetails";
+import { CloseSelectedFlightPanel } from "./CloseSelectedFlightPanel";
 
-const FlightDetails = ({
+const SelectedFlightPanel = ({
   setSelectedMarker,
   setSelectedCallsign,
   selectedMarker,
@@ -46,24 +46,15 @@ const FlightDetails = ({
         }}
         elevation={4}
       >
-        <h1>{`Aircraft ${selectedMarker.icao}`}</h1>
-        <IconButton
-          aria-label="add"
-          onClick={handleAddToPinnedFlights}
-          sx={{ position: "absolute", top: 8, left: 8 }}
-        >
-          <PushPinIcon />
-        </IconButton>
-        <IconButton
-          onClick={handleClose}
-          sx={{ position: "absolute", top: 8, right: 8 }}
-        >
-          <CloseIcon />
-        </IconButton>
-        <TwoColumnList marker={selectedMarker} />
+        <PanelHeader selectedMarker={selectedMarker} />
+        <PinSelectedFlight
+          handleAddToPinnedFlights={handleAddToPinnedFlights}
+        />
+        <CloseSelectedFlightPanel handleClose={handleClose} />
+        <FlightDetails marker={selectedMarker} />
       </Paper>
     )
   );
 };
 
-export default FlightDetails;
+export default SelectedFlightPanel;

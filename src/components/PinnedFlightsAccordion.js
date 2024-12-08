@@ -1,4 +1,7 @@
+import FlightLog from './FlightLog';
 import React from "react";
+import PushPinIcon from "@mui/icons-material/PushPin";
+
 import {
   Accordion,
   AccordionDetails,
@@ -10,7 +13,7 @@ import {
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
-import TwoColumnList from "./TwoColumnList";
+import FlightDetails from "./SelectedFlightPanel/FlightDetails/FlightDetails";
 
 export function PinnedFlightsAccordion({ setPinnedFlights, flight }) {
   return (
@@ -31,7 +34,7 @@ export function PinnedFlightsAccordion({ setPinnedFlights, flight }) {
               );
             }}
           >
-            <DeleteIcon />
+            <PushPinIcon />
           </IconButton>
         </Typography>
         <Typography sx={{ width: "33%", flexShrink: 0 }}>
@@ -43,7 +46,8 @@ export function PinnedFlightsAccordion({ setPinnedFlights, flight }) {
       </AccordionSummary>
 
       <AccordionDetails>
-        <TwoColumnList marker={flight}></TwoColumnList>
+        <FlightDetails marker={flight} />
+        <FlightLog />
       </AccordionDetails>
     </Accordion>
   );

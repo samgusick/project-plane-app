@@ -45,3 +45,7 @@ td {
 h1 {
   font-size: medium;
 }
+
+#flightDetailsTable {
+  margin: auto;
+}
