@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { Helmet } from "react-helmet";
 import L from "leaflet";
 import Map from "./Map";
-import PinnedFlightsList from "./PinnedFlightsList";
+import PinnedFlightsPanel from "./PinnedFlightsPanel/PinnedFlightsPanel";
 import SelectedFlightPanel from "./SelectedFlightPanel/SelectedFlightPanel";
 import ErrorPopup from "./ErrorPopup";
 
@@ -85,7 +85,7 @@ const MapPage = () => {
         mapRef={mapRef}
         resetMapView={resetMapView}
       />
-      <PinnedFlightsList
+      <PinnedFlightsPanel
         pinnedFlights={pinnedFlights}
         setPinnedFlights={setPinnedFlights}
       />

@@ -1,4 +1,4 @@
-import { PinnedFlightsAccordion } from './PinnedFlightsAccordion';
+import { PinnedFlightsAccordion } from './PinnedFlightsAccordion/PinnedFlightsAccordion';
 import React from "react";
 import {
   List,

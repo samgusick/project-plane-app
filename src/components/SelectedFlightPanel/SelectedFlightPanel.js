@@ -1,4 +1,4 @@
-import { PanelHeader } from "../PanelHeader";
+import { PanelHeader } from "./PanelHeader";
 import { PinSelectedFlight } from "./PinSelectedFlight";
 import React, { useEffect, useState } from "react";
 import { Paper } from "@mui/material";

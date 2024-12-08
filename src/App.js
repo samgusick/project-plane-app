@@ -1,4 +1,3 @@
-import logo from "./logo.svg";
 import "./App.css";
 import { Helmet } from "react-helmet";
 import MapPage from "./components/MapPage";
