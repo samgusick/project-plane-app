@@ -18,6 +18,17 @@ const Map = ({
   resetMapView,
 }) => {
   const markersRef = useRef({});
+  const orangeIcon = L.icon({
+    iconUrl: betaLogoOrange,
+    iconSize: [84, 65],
+    iconAnchor: [42, 32.5],
+  });
+
+  const greenIcon = L.icon({
+    iconUrl: betaLogoShadow,
+    iconSize: [84, 65],
+    iconAnchor: [42, 32.5],
+  });
 
   useEffect(() => {
     // Initialize map instance if it doesn't already exist
@@ -36,6 +47,21 @@ const Map = ({
         attribution:
           '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
       }).addTo(mapInstance);
+    }
+
+    if (!selectedMarker) {
+      Object.values(markersRef.current).forEach((otherMarker) => {
+        // Reapply mouseover and mouseout events to other markers
+        otherMarker.on("mouseover", () => {
+          otherMarker.setIcon(orangeIcon);
+        });
+        otherMarker.on("mouseout", () => {
+          otherMarker.setIcon(greenIcon);
+        });
+
+        // Set icon to green for other markers
+        otherMarker.setIcon(greenIcon);
+      });
     }
 
     const fetchPlaneData = async () => {
@@ -94,21 +120,10 @@ const Map = ({
               currentIcaos.add(icao);
               const existingMarker = markersRef.current[icao];
 
-              const orangeIcon = L.icon({
-                iconUrl: betaLogoOrange,
-                iconSize: [84, 65],
-                iconAnchor: [42, 32.5],
-              });
-
-              const greenIcon = L.icon({
-                iconUrl: betaLogoShadow,
-                iconSize: [84, 65],
-                iconAnchor: [42, 32.5],
-              });
-
               if (existingMarker) {
                 existingMarker.setLatLng([latitude, longitude]);
                 existingMarker.setRotationAngle(true_track || 0);
+                
               } else {
                 const marker = L.marker([latitude, longitude], {
                   icon:
@@ -119,20 +134,37 @@ const Map = ({
                       : greenIcon,
                 }).addTo(mapRef.current);
 
+                const mouseOut = (thisMarker) => {
+                  thisMarker.setIcon(greenIcon);
+                };
+
+                marker.on("mouseover", () => {
+                  marker.setIcon(orangeIcon);
+                });
+                marker.on("mouseout", () => mouseOut(marker));
+
                 marker.on("click", () => {
-                  // Log selectedMarker and clicked marker info
-                  console.log(
-                    "Selected Marker Longitude:",
-                    selectedMarker?.longitude,
-                    "Selected Marker Latitude:",
-                    selectedMarker?.latitude
-                  );
-                  console.log(
-                    "Clicked Marker Longitude:",
-                    longitude,
-                    "Clicked Marker Latitude:",
-                    latitude
-                  );
+                  // Reset all markers to default (greenIcon) and re-enable mouseover/mouseout
+                  Object.values(markersRef.current).forEach((otherMarker) => {
+                    if (otherMarker !== marker) {
+                      // Reapply mouseover and mouseout events to other markers
+                      otherMarker.on("mouseover", () => {
+                        otherMarker.setIcon(orangeIcon);
+                      });
+                      otherMarker.on("mouseout", () => {
+                        otherMarker.setIcon(greenIcon);
+                      });
+
+                      // Set icon to green for other markers
+                      otherMarker.setIcon(greenIcon);
+                    }
+                  });
+
+                  // Disable mouseout for the clicked marker
+                  marker.off("mouseout");
+
+                  // Highlight the clicked marker
+                  marker.setIcon(orangeIcon);
 
                   // Set the clicked marker as selected
                   setSelectedMarker({
@@ -156,7 +188,14 @@ const Map = ({
                     category,
                   });
                   setSelectedCallsign(callsign);
-                  marker.setIcon(orangeIcon);
+
+                  // Log clicked marker info
+                  console.log(
+                    "Clicked Marker Longitude:",
+                    longitude,
+                    "Latitude:",
+                    latitude
+                  );
                 });
 
                 markersRef.current[icao] = marker;
