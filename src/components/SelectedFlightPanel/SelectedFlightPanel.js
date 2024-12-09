@@ -16,16 +16,6 @@ const SelectedFlightPanel = ({
   const [timeDifference, setTimeDifference] = useState(null);
   const [markerActive, setMarkerActive] = useState(true);
 
-  const handleAddToPinnedFlights = () => {
-    if (
-      !pinnedFlights.some(
-        (flight) => flight.callsign === selectedMarker.callsign
-      )
-    ) {
-      setPinnedFlights((prev) => [...prev, selectedMarker]);
-    }
-  };
-
   const handleClose = () => {
     setSelectedCallsign(null);
     setSelectedMarker(null);
@@ -48,7 +38,9 @@ const SelectedFlightPanel = ({
       >
         <PanelHeader selectedMarker={selectedMarker} />
         <PinSelectedFlight
-          handleAddToPinnedFlights={handleAddToPinnedFlights}
+          pinnedFlights={pinnedFlights}
+          setPinnedFlights={setPinnedFlights}
+          markerToPin={selectedMarker}
         />
         <CloseSelectedFlightPanel handleClose={handleClose} />
         <FlightDetails marker={selectedMarker} />

@@ -13,10 +13,10 @@ import {
 import DeleteIcon from "@mui/icons-material/Delete";
 import FlightDetails from "../../SelectedFlightPanel/FlightDetails/FlightDetails";
 import { PinnedFlightAccordionSummary } from "./PinnedFlightAccordionSummary";
-export function PinnedFlightsAccordion({ setPinnedFlights, flight }) {
+export function PinnedFlightsAccordion({ pinnedFlights, setPinnedFlights, flight }) {
   return (
     <Accordion>
-      <PinnedFlightAccordionSummary setPinnedFlights={setPinnedFlights} flight={flight}/>
+      <PinnedFlightAccordionSummary pinnedFlights={pinnedFlights} setPinnedFlights={setPinnedFlights} flight={flight}/>
       <AccordionDetails>
         <FlightDetails marker={flight} />
         <FlightLog />

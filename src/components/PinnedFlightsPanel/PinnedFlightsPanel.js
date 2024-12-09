@@ -42,6 +42,7 @@ const PinnedFlightsList = ({ pinnedFlights, setPinnedFlights }) => {
         {pinnedFlights.map((flight, index) => (
           <PinnedFlightsAccordion
             key={flight.callsign} // Use a unique key for each flight
+            pinnedFlights={pinnedFlights}
             flight={flight} // Pass the flight as a prop
             setPinnedFlights={setPinnedFlights} // Pass setPinnedFlights to modify the list
           />

@@ -2,8 +2,9 @@ import React from "react";
 import { AccordionSummary, IconButton, Typography } from "@mui/material";
 import PushPinIcon from "@mui/icons-material/PushPin";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
+import { PinSelectedFlight } from "../../SelectedFlightPanel/PinSelectedFlight";
 
-export function PinnedFlightAccordionSummary({ setPinnedFlights, flight}) {
+export function PinnedFlightAccordionSummary({ pinnedFlights, setPinnedFlights, flight}) {
   return (
     <AccordionSummary
       expandIcon={<ArrowDownwardIcon />}
@@ -11,20 +12,7 @@ export function PinnedFlightAccordionSummary({ setPinnedFlights, flight}) {
       id="panel1bh-header"
     >
       <Typography>
-        <IconButton
-          sx={{
-            padding: 0,
-          }}
-          onClick={() => {
-            setPinnedFlights((prevPinnedFlights) =>
-              prevPinnedFlights.filter(
-                (item) => item.callsign !== flight.callsign
-              )
-            );
-          }}
-        >
-          <PushPinIcon />
-        </IconButton>
+        <PinSelectedFlight pinnedFlights={pinnedFlights} markerToPin={flight} setPinnedFlights={setPinnedFlights}/>
       </Typography>
       <Typography
         sx={{

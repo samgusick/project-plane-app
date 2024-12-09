@@ -17,20 +17,22 @@ const Map = ({
   mapRef,
   resetMapView,
 }) => {
-  const markersRef = useRef({});
-  const orangeIcon = L.icon({
-    iconUrl: betaLogoOrange,
-    iconSize: [84, 65],
-    iconAnchor: [42, 32.5],
-  });
 
-  const greenIcon = L.icon({
-    iconUrl: betaLogoShadow,
-    iconSize: [84, 65],
-    iconAnchor: [42, 32.5],
-  });
+  const markersRef = useRef({});
 
   useEffect(() => {
+    const orangeIcon = L.icon({
+      iconUrl: betaLogoOrange,
+      iconSize: [84, 65],
+      iconAnchor: [42, 32.5],
+    });
+  
+    const greenIcon = L.icon({
+      iconUrl: betaLogoShadow,
+      iconSize: [84, 65],
+      iconAnchor: [42, 32.5],
+    });
+
     // Initialize map instance if it doesn't already exist
     if (!mapRef.current) {
       const mapInstance = L.map("map", {
@@ -123,7 +125,64 @@ const Map = ({
               if (existingMarker) {
                 existingMarker.setLatLng([latitude, longitude]);
                 existingMarker.setRotationAngle(true_track || 0);
-                
+
+                if (
+                  selectedMarker &&
+                  selectedMarker.icao === icao &&
+                  selectedMarker.last_contact !== last_contact
+                ) {
+                  setSelectedMarker({
+                    icao,
+                    callsign,
+                    origin_country,
+                    time_position,
+                    last_contact,
+                    longitude,
+                    latitude,
+                    baro_altitude,
+                    on_ground,
+                    velocity,
+                    true_track,
+                    vertical_rate,
+                    sensors,
+                    geo_altitude,
+                    squawk,
+                    spi,
+                    position_source,
+                    category,
+                  });
+
+                  setSelectedCallsign(callsign);
+                } else {
+                  // Update pinned flights
+                  setPinnedFlights((prevPinnedFlights) =>
+                    prevPinnedFlights.map((flight) =>
+                      flight.callsign === callsign
+                        ? {
+                            ...flight,
+                            icao,
+                            callsign,
+                            origin_country,
+                            time_position,
+                            last_contact,
+                            longitude,
+                            latitude,
+                            baro_altitude,
+                            on_ground,
+                            velocity,
+                            true_track,
+                            vertical_rate,
+                            sensors,
+                            geo_altitude,
+                            squawk,
+                            spi,
+                            position_source,
+                            category,
+                          }
+                        : flight
+                    )
+                  );
+                }
               } else {
                 const marker = L.marker([latitude, longitude], {
                   icon:
@@ -210,6 +269,11 @@ const Map = ({
             const marker = markersRef.current[icao];
             mapRef.current.removeLayer(marker);
             delete markersRef.current[icao];
+            // if we're deleting a marker but it's the selected one,
+            // make sure to reset the map view
+            if (selectedMarker.icao === icao) {
+              resetMapView();
+            }
           }
         });
       } catch (error) {
