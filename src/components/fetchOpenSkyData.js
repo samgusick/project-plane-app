@@ -1,7 +1,7 @@
-import { OPENSKY_CREDENTIALS } from "../config/config";
+import { username } from "../config/config";
+import { password } from "../config/config";
 
 export const fetchOpenSkyData = async () => {
-  const { username, password } = OPENSKY_CREDENTIALS;
   const credentials = btoa(`${username}:${password}`);
   const bounds = {
     lamin: 42.7,
@@ -10,6 +10,7 @@ export const fetchOpenSkyData = async () => {
     lomax: -71.4657,
   };
 
+  console.log("getting new data");
   const response = await fetch(
     `https://opensky-network.org/api/states/all?lamin=${bounds.lamin}&lomin=${bounds.lomin}&lamax=${bounds.lamax}&lomax=${bounds.lomax}`,
     { headers: { Authorization: `Basic ${credentials}` } }
