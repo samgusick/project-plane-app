@@ -3,10 +3,10 @@ export function PlaneOrientationImg({
   planeImage,
   marker
 }) {
-  return <img src={planeImage} style={{
+  return <img src={planeImage} alt="betaLogo" style={{
     width: 75,
     height: 75,
-    transform: `rotate(${marker.true_track}deg)`
+    transform: `rotate(${marker.trueTrack}deg)`
   }}></img>;
 }
   

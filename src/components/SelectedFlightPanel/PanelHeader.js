@@ -1,5 +1,8 @@
 import React from "react";
-export function PanelHeader({selectedMarker}) {
-  return <h1>{`Aircraft ${selectedMarker.icao}`}</h1>;
+export function PanelHeader({ selectedMarker }) {
+
+  if (selectedMarker){
+    return <h1>{`Aircraft ${selectedMarker.icao24}`}</h1>;
+
+  }
 }
-  

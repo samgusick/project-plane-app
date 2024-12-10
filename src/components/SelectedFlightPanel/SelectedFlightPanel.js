@@ -1,30 +1,28 @@
 import { PanelHeader } from "./PanelHeader";
 import { PinSelectedFlight } from "./PinSelectedFlight";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Paper } from "@mui/material";
 import FlightDetails from "./FlightDetails/FlightDetails";
 import { CloseSelectedFlightPanel } from "./CloseSelectedFlightPanel";
 
 const SelectedFlightPanel = ({
   setSelectedMarker,
-  setSelectedCallsign,
   selectedMarker,
   pinnedFlights,
   setPinnedFlights,
   mapRef,
 }) => {
-  const [timeDifference, setTimeDifference] = useState(null);
-  const [markerActive, setMarkerActive] = useState(true);
 
   const handleClose = () => {
-    setSelectedCallsign(null);
     setSelectedMarker(null);
     mapRef.current.setView([44.0, -72.7], 8);
   };
 
+  if (selectedMarker){
+
   return (
     selectedMarker &&
-    markerActive && (
+    (
       <Paper
         style={{
           position: "fixed",
@@ -36,17 +34,19 @@ const SelectedFlightPanel = ({
         }}
         elevation={4}
       >
-        <PanelHeader selectedMarker={selectedMarker} />
+        
         <PinSelectedFlight
           pinnedFlights={pinnedFlights}
           setPinnedFlights={setPinnedFlights}
           markerToPin={selectedMarker}
         />
+        <PanelHeader selectedMarker={selectedMarker} />
         <CloseSelectedFlightPanel handleClose={handleClose} />
-        <FlightDetails marker={selectedMarker} />
+        <FlightDetails marker={selectedMarker}/>
       </Paper>
     )
-  );
+  );  
+  }
 };
 
 export default SelectedFlightPanel;

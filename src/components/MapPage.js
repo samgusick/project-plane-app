@@ -5,18 +5,43 @@ import Map from "./Map";
 import PinnedFlightsPanel from "./PinnedFlightsPanel/PinnedFlightsPanel";
 import SelectedFlightPanel from "./SelectedFlightPanel/SelectedFlightPanel";
 import ErrorPopup from "./ErrorPopup";
+import { usePolling } from "./APIPollingHook";
+import { fetchOpenSkyData } from "./fetchOpenSkyData";
+import betaLogoShadow from "../images/beta_air_llc_logo_shadow.png";
+import betaLogoOrange from "../images/beta_air_llc_logo_shadow_orange.png";
 
 const MapPage = () => {
   const [selectedMarker, setSelectedMarker] = useState(null);
-  const [selectedCallsign, setSelectedCallsign] = useState(null);
   const [pinnedFlights, setPinnedFlights] = useState([]);
   const [loadFlights, setLoadFlights] = useState(true);
+  const [planeData, setPlaneData] = useState(null);
+
+  const markersRef = useRef({}); // Use an object to track markers by callsign
+
+  const greyIcon = L.icon({
+    iconUrl: betaLogoShadow, // Ensure this variable is defined
+    iconSize: [84, 65],
+    iconAnchor: [42, 32.5],
+  });
+
+  const orangeIcon = L.icon({
+    iconUrl: betaLogoOrange, // Ensure this variable is defined
+    iconSize: [84, 65],
+    iconAnchor: [42, 32.5],
+  });
+
+  const data = usePolling(fetchOpenSkyData, 30000);
+
+  
+
+  useEffect(() => {
+    setPlaneData(data);
+  }, [data]);
 
   const mapRef = useRef(null);
 
   const resetMapView = () => {
     if (mapRef.current) {
-      setSelectedCallsign(null);
       setSelectedMarker(null);
       mapRef.current.setView([44.0, -72.7], 8);
     }
@@ -41,22 +66,17 @@ const MapPage = () => {
     }
   }, []);
 
-  useEffect(() => {
-    const handleResize = () => {
-      if (mapRef.current && selectedMarker) {
-        mapRef.current.setView(
-          [selectedMarker.latitude, selectedMarker.longitude],
-          12
-        );
-      }
-    };
+  const selectedPlaneData =
+    planeData && selectedMarker
+      ? planeData.find((plane) => plane.callsign === selectedMarker)
+      : null;
 
-    window.addEventListener("resize", handleResize);
+  const NewPinnedPlaneData =
+    planeData && pinnedFlights
+      ? planeData.filter((plane) => pinnedFlights.includes(plane.callsign))
+      : [];
 
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, [selectedMarker]);
+  // Check if any of the planes in NewPinnedPlaneData are not in the pinnedFlightsCache
 
   return (
     <div style={{ height: "100vh", width: "100vw", position: "relative" }}>
@@ -74,29 +94,32 @@ const MapPage = () => {
         ></script>
       </Helmet>
       <Map
-        selectedMarker={selectedMarker}
-        setSelectedMarker={setSelectedMarker}
-        setSelectedCallsign={setSelectedCallsign}
-        setPinnedFlights={setPinnedFlights}
-        setLoadFlights={setLoadFlights}
-        loadFlights={loadFlights}
-        selectedCallsign={selectedCallsign}
-        pinnedFlights={pinnedFlights}
+        greyIcon={greyIcon}
+        orangeIcon={orangeIcon}
+        planeData={planeData}
         mapRef={mapRef}
-        resetMapView={resetMapView}
-      />
-      <PinnedFlightsPanel
-        pinnedFlights={pinnedFlights}
-        setPinnedFlights={setPinnedFlights}
-      />
-      <SelectedFlightPanel
         setSelectedMarker={setSelectedMarker}
-        setSelectedCallsign={setSelectedCallsign}
+        markersRef={markersRef}
         selectedMarker={selectedMarker}
-        setPinnedFlights={setPinnedFlights}
-        pinnedFlights={pinnedFlights}
-        mapRef={mapRef}
       />
+
+      {NewPinnedPlaneData && (
+        <PinnedFlightsPanel
+          pinnedFlights={NewPinnedPlaneData}
+          setPinnedFlights={setPinnedFlights}
+          planeData={planeData}
+        />
+      )}
+      {selectedPlaneData && (
+        <SelectedFlightPanel
+          setSelectedMarker={setSelectedMarker}
+          selectedMarker={selectedPlaneData}
+          planeData={planeData}
+          setPinnedFlights={setPinnedFlights}
+          pinnedFlights={NewPinnedPlaneData}
+          mapRef={mapRef}
+        />
+      )}
       {!loadFlights && <ErrorPopup />}
     </div>
   );

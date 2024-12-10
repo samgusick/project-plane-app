@@ -1,4 +1,4 @@
-export function CountryFlag({ marker }) {
+export function CountryFlag({ marker, planeData }) {
   const iso3166Countries = {
     Afghanistan: "AF",
     Albania: "AL",
@@ -89,7 +89,7 @@ export function CountryFlag({ marker }) {
     Kenya: "KE",
     Kiribati: "KI",
     "Korea (North)": "KP",
-    "Korea (South)": "KR",
+    "Republic of Korea": "KR",
     Kuwait: "KW",
     Kyrgyzstan: "KG",
     Laos: "LA",
@@ -196,14 +196,14 @@ export function CountryFlag({ marker }) {
     Zimbabwe: "ZW",
   };
 
-  const markerCountry = iso3166Countries[marker.origin_country];
+  const markerCountry = iso3166Countries[marker.originCountry];
 
   return (
     <img
       style={{
         border: "1px solid",
       }}
-      alt={marker.origin_country}
+      alt={marker.originCountry}
       src={`http://purecatamphetamine.github.io/country-flag-icons/3x2/${markerCountry}.svg`}
     />
   );

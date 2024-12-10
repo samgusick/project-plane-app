@@ -6,14 +6,12 @@ import { useEffect, useState } from "react";
 
 const FlightDetails = ({ marker }) => {
   const [ContactTimeDifference, setContactTimeDifference] = useState(null);
-  const [PositionTimeDifference, setPositonTimeDifference] = useState(null);
 
   useEffect(() => {
     if (marker) {
       const interval = setInterval(() => {
         const currentUnixTime = Math.floor(Date.now() / 1000);
-        setPositonTimeDifference(currentUnixTime - marker.time_position);
-        setContactTimeDifference(currentUnixTime - marker.last_contact);
+        setContactTimeDifference(currentUnixTime - marker.lastContact);
       }, 1000);
 
       return () => clearInterval(interval);

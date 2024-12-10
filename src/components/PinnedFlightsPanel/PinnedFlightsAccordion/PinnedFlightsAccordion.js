@@ -13,14 +13,24 @@ import {
 import DeleteIcon from "@mui/icons-material/Delete";
 import FlightDetails from "../../SelectedFlightPanel/FlightDetails/FlightDetails";
 import { PinnedFlightAccordionSummary } from "./PinnedFlightAccordionSummary";
-export function PinnedFlightsAccordion({ pinnedFlights, setPinnedFlights, flight }) {
-  return (
-    <Accordion>
-      <PinnedFlightAccordionSummary pinnedFlights={pinnedFlights} setPinnedFlights={setPinnedFlights} flight={flight}/>
-      <AccordionDetails>
-        <FlightDetails marker={flight} />
-        <FlightLog />
-      </AccordionDetails>
-    </Accordion>
-  );
+export function PinnedFlightsAccordion({ pinnedFlights, setPinnedFlights, plane }) {
+  
+  // const selectedPlaneData = planeData && callsign
+  // ? planeData.find((plane) => plane.callsign === callsign)
+  // : null;
+  // console.log(callsign);
+  // console.log(selectedPlaneData);
+
+  if (plane) {
+
+    return (
+      <Accordion>
+        <PinnedFlightAccordionSummary pinnedFlights={pinnedFlights} setPinnedFlights={setPinnedFlights} plane={plane}/>
+        <AccordionDetails>
+          <FlightDetails marker={plane} />
+          <FlightLog />
+        </AccordionDetails>
+      </Accordion>
+    );
+  }
 }

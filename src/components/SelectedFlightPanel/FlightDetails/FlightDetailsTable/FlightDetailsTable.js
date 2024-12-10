@@ -6,6 +6,7 @@ export function FlightDetailsTable({
   marker,
   planeImage,
   ContactTimeDifference,
+  planeData
 }) {
   return (
     <table id="flightDetailsTable">
@@ -16,7 +17,7 @@ export function FlightDetailsTable({
               padding: "15px",
             }}
           >
-            <CountryFlag marker={marker} />
+            <CountryFlag marker={marker} planeData={planeData}/>
           </td>
           <td
             style={{

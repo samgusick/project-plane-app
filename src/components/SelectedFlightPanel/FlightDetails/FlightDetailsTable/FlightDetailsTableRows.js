@@ -4,22 +4,22 @@ export function FlightDetailsTableRows({ marker, ContactTimeDifference }) {
       value = "N/A";
     }
 
-    if (key === "last_contact") {
+    if (key === "lastContact") {
       return (
         <tr key={index}>
           <td>{key.toUpperCase().replace("_", " ")}</td>
           <td>{ContactTimeDifference}s</td>
         </tr>
       );
-    } else if (key === "true_track") {
+    } else if (key === "trueTrack") {
       return (
         <tr key={index}>
           <td>{key.toUpperCase().replace("_", " ")}</td>
           <td>{value}°</td>
         </tr>
       );
-    } else if (key === "baro_altitude" || key === "geo_altitude") {
-      if (value && value != "N/A") {
+    } else if (key === "baroAltitude" || key === "geoAltitude") {
+      if (value && value !== "N/A") {
         return (
           <tr key={index}>
             <td>{key.toUpperCase().replace("_", " ")}</td>
@@ -46,11 +46,11 @@ export function FlightDetailsTableRows({ marker, ContactTimeDifference }) {
     } else if (
       key === "category" ||
       key === "spi" ||
-      key === "position_source" ||
+      key === "positionSource" ||
       key === "sensors" ||
-      key === "on_ground" ||
+      key === "onGround" ||
       key === "icao" ||
-      key === "time_position"
+      key === "timePosition"
     ) {
       return;
     } else {

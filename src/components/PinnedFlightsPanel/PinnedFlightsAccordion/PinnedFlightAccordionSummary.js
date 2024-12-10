@@ -4,7 +4,7 @@ import PushPinIcon from "@mui/icons-material/PushPin";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import { PinSelectedFlight } from "../../SelectedFlightPanel/PinSelectedFlight";
 
-export function PinnedFlightAccordionSummary({ pinnedFlights, setPinnedFlights, flight}) {
+export function PinnedFlightAccordionSummary({ pinnedFlights, setPinnedFlights, plane}) {
   return (
     <AccordionSummary
       expandIcon={<ArrowDownwardIcon />}
@@ -12,7 +12,7 @@ export function PinnedFlightAccordionSummary({ pinnedFlights, setPinnedFlights, 
       id="panel1bh-header"
     >
       <Typography>
-        <PinSelectedFlight pinnedFlights={pinnedFlights} markerToPin={flight} setPinnedFlights={setPinnedFlights}/>
+        <PinSelectedFlight pinnedFlights={pinnedFlights} markerToPin={plane} setPinnedFlights={setPinnedFlights}/>
       </Typography>
       <Typography
         sx={{
@@ -20,14 +20,14 @@ export function PinnedFlightAccordionSummary({ pinnedFlights, setPinnedFlights, 
           flexShrink: 0,
         }}
       >
-        Aircraft {flight.icao}
+        Aircraft {plane.icao24}
       </Typography>
       <Typography
         sx={{
           color: "text.secondary",
         }}
       >
-        {flight.origin_country}
+        {plane.originCountry}
       </Typography>
     </AccordionSummary>
   );
