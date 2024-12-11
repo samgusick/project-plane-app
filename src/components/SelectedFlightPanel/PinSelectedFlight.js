@@ -11,14 +11,14 @@ export function PinSelectedFlight({
     if (setPinnedFlights) {
       setPinnedFlights((prev) => {
         // Check if the selectedMarker is already in pinnedFlights
-        if (prev.some((callsign) => callsign === markerToPin.callsign)) {
+        if (prev.some((icao24) => icao24 === markerToPin.icao24)) {
           // Remove the selectedMarker
           return prev.filter(
-            (callsign) => callsign !== markerToPin.callsign
+            (icao24) => icao24 !== markerToPin.icao24
           );
         } else {
           // Add the selectedMarker
-          return [...prev, markerToPin.callsign];
+          return [...prev, markerToPin.icao24];
         }
       });
     }
@@ -29,7 +29,7 @@ export function PinSelectedFlight({
   useEffect(() => {
 
     setIsPinned(
-      pinnedFlights.some((plane) => plane.callsign === markerToPin.callsign)
+      pinnedFlights.some((plane) => plane.icao24 === markerToPin.icao24)
     );
   }, [pinnedFlights, markerToPin]); // Dependency array updated
 

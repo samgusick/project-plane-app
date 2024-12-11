@@ -16,7 +16,7 @@ const MapPage = () => {
   const [loadFlights, setLoadFlights] = useState(true);
   const [planeData, setPlaneData] = useState(null);
 
-  const markersRef = useRef({}); // Use an object to track markers by callsign
+  const markersRef = useRef({}); // Use an object to track markers by icao24
 
   const greyIcon = L.icon({
     iconUrl: betaLogoShadow, // Ensure this variable is defined
@@ -68,12 +68,12 @@ const MapPage = () => {
 
   const selectedPlaneData =
     planeData && selectedMarker
-      ? planeData.find((plane) => plane.callsign === selectedMarker)
+      ? planeData.find((plane) => plane.icao24 === selectedMarker)
       : null;
 
   const NewPinnedPlaneData =
     planeData && pinnedFlights
-      ? planeData.filter((plane) => pinnedFlights.includes(plane.callsign))
+      ? planeData.filter((plane) => pinnedFlights.includes(plane.icao24))
       : [];
 
   // Check if any of the planes in NewPinnedPlaneData are not in the pinnedFlightsCache

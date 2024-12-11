@@ -10,7 +10,6 @@ export const fetchOpenSkyData = async () => {
     lomax: -71.4657,
   };
 
-  console.log("getting new data");
   const response = await fetch(
     `https://opensky-network.org/api/states/all?lamin=${bounds.lamin}&lomin=${bounds.lomin}&lamax=${bounds.lamax}&lomax=${bounds.lomax}`,
     { headers: { Authorization: `Basic ${credentials}` } }
@@ -21,6 +20,8 @@ export const fetchOpenSkyData = async () => {
   }
 
   const { states } = await response.json();
+
+  console.log(states);
 
   if (!states) {
     return [];

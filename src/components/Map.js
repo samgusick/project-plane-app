@@ -45,13 +45,13 @@ const Map = ({ mapRef, markersRef, planeData, setSelectedMarker, greyIcon, orang
 
     // Add or update markers
     planeData.forEach((plane) => {
-      if (!updatedMarkers[plane.callsign]) {
+      if (!updatedMarkers[plane.icao24]) {
         const marker = L.marker([plane.latitude, plane.longitude], {
           icon: greyIcon,
         }).addTo(mapRef.current);
 
         marker.on("click", () => {
-          setSelectedMarker(plane.callsign);
+          setSelectedMarker(plane.icao24);
 
           Object.values(markersRef.current).forEach((otherMarker) => {
             otherMarker.setIcon(greyIcon);
@@ -74,20 +74,20 @@ const Map = ({ mapRef, markersRef, planeData, setSelectedMarker, greyIcon, orang
         });
         
         marker.setRotationAngle(plane.trueTrack);
-        updatedMarkers[plane.callsign] = marker;
+        updatedMarkers[plane.icao24] = marker;
       } else {
         // Update existing marker
-        const marker = updatedMarkers[plane.callsign];
+        const marker = updatedMarkers[plane.icao24];
         marker.setLatLng([plane.latitude, plane.longitude]);
         marker.setRotationAngle(plane.trueTrack);
       }
     });
 
     // Remove markers no longer in planeData
-    Object.keys(updatedMarkers).forEach((callsign) => {
-      if (!planeData.some((plane) => plane.callsign === callsign)) {
-        mapRef.current.removeLayer(updatedMarkers[callsign]);
-        delete updatedMarkers[callsign];
+    Object.keys(updatedMarkers).forEach((icao24) => {
+      if (!planeData.some((plane) => plane.icao24 === icao24)) {
+        mapRef.current.removeLayer(updatedMarkers[icao24]);
+        delete updatedMarkers[icao24];
       }
     });
 

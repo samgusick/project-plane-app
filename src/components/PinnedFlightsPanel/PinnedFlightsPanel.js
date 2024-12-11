@@ -30,7 +30,7 @@ const PinnedFlightsList = ({ pinnedFlights, setPinnedFlights }) => {
         {pinnedFlights.map((plane) => (
           
           <PinnedFlightsAccordion
-            key={plane.callsign}
+            key={plane.icao24}
             plane={plane} // Use a unique key for each flight
             pinnedFlights={pinnedFlights}
             setPinnedFlights={setPinnedFlights} // Pass setPinnedFlights to modify the list
