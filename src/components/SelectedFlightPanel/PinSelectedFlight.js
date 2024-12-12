@@ -54,7 +54,7 @@ export function PinSelectedFlight({
         left: leftPosition,
       }}
     >
-      <PushPinIcon />
+      <PushPinIcon fontSize="large"/>
     </IconButton>
   );
 }

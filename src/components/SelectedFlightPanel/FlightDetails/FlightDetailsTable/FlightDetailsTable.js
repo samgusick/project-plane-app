@@ -17,7 +17,7 @@ export function FlightDetailsTable({
 
   return (
     <>
-    <TableContainer component={Paper} style={{}}>
+    <TableContainer component={Paper}>
       <Table sx={{ "& .MuiTableCell-root": { padding: 0.5 } }}>
         <TableBody>
           <TableRow>

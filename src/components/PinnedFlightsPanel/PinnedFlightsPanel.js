@@ -10,10 +10,10 @@ const PinnedFlightsList = ({ pinnedFlights, setPinnedFlights, mapRef, setCachedP
   return (
     <Paper
     className='pinnedFlightsPanelPaper'
-      // style={{
-      //   width: "100%",
-      //   height: "100%"
-      // }}
+    sx={{
+      pointerEvents: "auto",
+      overflow: "auto",
+    }}
     >
       <Typography variant="h6" style={{ marginBottom: "10px" }}>
         Pinned Flights
@@ -21,7 +21,6 @@ const PinnedFlightsList = ({ pinnedFlights, setPinnedFlights, mapRef, setCachedP
       <div
         style={{
           overflowY: "auto", // Make this section scrollable
-          maxHeight: "calc(80vh - 40px)", // Adjust maxHeight to leave space for the header
         }}
       >
         {pinnedFlights.map((plane) => (

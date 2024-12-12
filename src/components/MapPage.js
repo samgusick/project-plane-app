@@ -111,24 +111,22 @@ const MapPage = () => {
       />
       <Grid2
         container
-        spacing={10}
+        spacing={0}
         sx={{
           position: "fixed", // Fix the position
           top: "50%", // Move it vertically to the center
           left: "50%", // Move it horizontally to the center
           transform: "translate(-50%, -50%)", // Adjust positioning to truly center it
-          width: "90%", // 90% of the width
-          height: "90%", // 90% of the height
+          width: "95%", // 90% of the width
+          height: "95%", // 90% of the height
           zIndex: 9999, // Ensure it's on top of other content
           pointerEvents: "none", // Allows interactions behind the element
         }}
       >
         <Grid2
-          size={3}
+          size={{xs: 12, sm: 5, md: 3, lg: 4, xl: 3}}
           sx={{
             height: "100%",
-            pointerEvents: "auto",
-            overflow: "auto",
           }}
         >
           {selectedPlaneData && (
@@ -143,14 +141,14 @@ const MapPage = () => {
             />
           )}
         </Grid2>
-        <Grid2 size={6}>
+        <Grid2 size={{xs: 0, sm: 0, md: 6, lg: 4,  xl: 6}}>
 
         </Grid2>
         <Grid2
-          size={3}
+          size={{xs: 0, sm: 0, md: 3, lg: 4,  xl: 3}}
           sx={{
             height: "100%",
-            pointerEvents: "auto",
+
             overflow: "auto",
           }}
         >

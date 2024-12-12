@@ -9,10 +9,10 @@ export function CloseSelectedFlightPanel({ handleClose }) {
       // sx={{
       //   position: "absolute",
       //   top: 8,
-      //   right: 8,
+      //   left: "100%",
       // }}
     >
-      <CloseIcon />
+      <CloseIcon fontSize="large"/>
     </IconButton>
   );
 }
