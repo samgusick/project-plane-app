@@ -20,13 +20,13 @@ const MapPage = () => {
   const markersRef = useRef({}); // Use an object to track markers by icao24
 
   const greyIcon = L.icon({
-    iconUrl: betaLogoShadow, // Ensure this variable is defined
+    iconUrl: betaLogoShadow,
     iconSize: [84, 65],
     iconAnchor: [42, 32.5],
   });
 
   const orangeIcon = L.icon({
-    iconUrl: betaLogoOrange, // Ensure this variable is defined
+    iconUrl: betaLogoOrange,
     iconSize: [84, 65],
     iconAnchor: [42, 32.5],
   });
