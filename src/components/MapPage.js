@@ -39,27 +39,6 @@ const MapPage = () => {
     setPlaneData(data);
   }, [data]);
 
-  useEffect(() => {
-    if (pinnedFlights && planeData) {
-      setCachedPinnedPlaneData((prevCache) => {
-        // Update existing cached data and add new data
-        const updatedCache = pinnedFlights.map((icao) => {
-          // Find the latest plane data for the pinned flight
-          const latestPlane = planeData.find((plane) => plane.icao24 === icao);
-
-          // Check if it's already in the cache
-          const cachedPlane = prevCache.find((plane) => plane.icao24 === icao);
-
-          // Return the latest plane data if found, otherwise keep the cached one
-          return latestPlane || cachedPlane;
-        });
-
-        // Filter out any cached planes that are no longer in pinnedFlights
-        return updatedCache.filter(Boolean); // Ensure no null or undefined values
-      });
-    }
-  }, [pinnedFlights, planeData]);
-
   const mapRef = useRef(null);
 
   useEffect(() => {
