@@ -18,7 +18,7 @@ const Map = ({ mapRef, markersRef, planeData, setSelectedMarker, greyIcon, orang
   };
 
   useEffect(() => {
-    // console.log("rerender")
+    console.log("rerender")
     markersRefSetDefaultLogos();
     // Initialize map instance if it doesn't already exist
     if (!mapRef.current) {

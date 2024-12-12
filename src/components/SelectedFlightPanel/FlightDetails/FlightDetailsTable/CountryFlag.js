@@ -169,7 +169,6 @@ export function CountryFlag({ marker, planeData }) {
     Sweden: "SE",
     Switzerland: "CH",
     Syria: "SY",
-    Taiwan: "TW",
     Tajikistan: "TJ",
     Tanzania: "TZ",
     Thailand: "TH",

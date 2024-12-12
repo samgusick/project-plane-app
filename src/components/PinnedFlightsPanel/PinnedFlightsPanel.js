@@ -6,7 +6,7 @@ import {
 } from "@mui/material";
 import { map } from 'leaflet';
 
-const PinnedFlightsList = ({ pinnedFlights, setPinnedFlights, mapRef, setCachedPinnedPlaneData }) => {
+const PinnedFlightsList = ({ pinnedFlights, setPinnedFlights, mapRef }) => {
   return (
     <Paper
     className='pinnedFlightsPanelPaper'
@@ -31,7 +31,6 @@ const PinnedFlightsList = ({ pinnedFlights, setPinnedFlights, mapRef, setCachedP
             pinnedFlights={pinnedFlights}
             setPinnedFlights={setPinnedFlights} // Pass setPinnedFlights to modify the list
             mapRef={mapRef}
-            setCachedPinnedPlaneData={setCachedPinnedPlaneData}
           />
         ))}
       </div>
