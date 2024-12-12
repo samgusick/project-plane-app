@@ -40,13 +40,6 @@ const MapPage = () => {
 
   const mapRef = useRef(null);
 
-  const resetMapView = () => {
-    if (mapRef.current) {
-      setSelectedMarker(null);
-      mapRef.current.setView([44.0, -72.7], 8);
-    }
-  };
-
   useEffect(() => {
     if (!mapRef.current) {
       const mapInstance = L.map("map", {
@@ -108,6 +101,7 @@ const MapPage = () => {
           pinnedFlights={NewPinnedPlaneData}
           setPinnedFlights={setPinnedFlights}
           planeData={planeData}
+          mapRef={mapRef}
         />
       )}
       {selectedPlaneData && (

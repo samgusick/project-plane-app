@@ -6,6 +6,9 @@ export function PinSelectedFlight({
   pinnedFlights,
   setPinnedFlights,
   markerToPin,
+  leftPosition,
+  topPosition,
+  positionType,
 }) {
   const handleTogglePinnedFlights = () => {
     if (setPinnedFlights) {
@@ -38,11 +41,11 @@ export function PinSelectedFlight({
       color={isPinned ? "primary" : "default"} // Conditional color based on isPinned
       aria-label="toggle-pin"
       onClick={handleTogglePinnedFlights}
-      // sx={{
-      //   position: "absolute",
-      //   top: 8,
-      //   left: 8,
-      // }}
+      sx={{
+        position: positionType,
+        top: topPosition,
+        left: leftPosition,
+      }}
     >
       <PushPinIcon />
     </IconButton>

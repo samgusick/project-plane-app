@@ -4,7 +4,7 @@ import { Paper} from "@mui/material";
 import planeImage from "../../../images/beta_air_llc_logo.png"
 import { useEffect, useState } from "react";
 
-const FlightDetails = ({ marker }) => {
+const FlightDetails = ({ marker, mapRef }) => {
   const [ContactTimeDifference, setContactTimeDifference] = useState(null);
 
   useEffect(() => {
@@ -20,7 +20,7 @@ const FlightDetails = ({ marker }) => {
 
   return (
     <Paper sx={{padding: "15px"}}>
-      <FlightDetailsTable marker={marker} planeImage={planeImage} ContactTimeDifference={ContactTimeDifference}  />
+      <FlightDetailsTable marker={marker} planeImage={planeImage} ContactTimeDifference={ContactTimeDifference} mapRef={mapRef} />
     </Paper>
   );
 };

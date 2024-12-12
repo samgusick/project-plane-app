@@ -1,24 +1,35 @@
 export function FlightDetailsTableRows({ marker, ContactTimeDifference }) {
   return Object.entries(marker).map(([key, value], index) => {
+
+    const formatKey = (inputString) => {
+      // // Capitalize the first letter
+      // const capitalizedString = inputString.charAt(0).toUpperCase() + inputString.slice(1);
+    
+      // Add spaces before capital letters
+      return inputString.replace(/([A-Z])/g, ' $1').trim();
+    }
+  
+    key = formatKey(key);
+
     if (value === undefined || value === null) {
       value = "N/A";
     }
 
-    if (key === "lastContact") {
+    if (key === "last Contact") {
       return (
         <tr key={index}>
           <td>{key.toUpperCase().replace("_", " ")}</td>
           <td>{ContactTimeDifference}s</td>
         </tr>
       );
-    } else if (key === "trueTrack") {
+    } else if (key === "true Track") {
       return (
         <tr key={index}>
           <td>{key.toUpperCase().replace("_", " ")}</td>
           <td>{value}°</td>
         </tr>
       );
-    } else if (key === "baroAltitude" || key === "geoAltitude") {
+    } else if (key === "baro Altitude" || key === "geo Altitude") {
       if (value && value !== "N/A") {
         return (
           <tr key={index}>
@@ -46,11 +57,11 @@ export function FlightDetailsTableRows({ marker, ContactTimeDifference }) {
     } else if (
       key === "category" ||
       key === "spi" ||
-      key === "positionSource" ||
+      key === "position Source" ||
       key === "sensors" ||
-      key === "onGround" ||
+      key === "on Ground" ||
       key === "icao24" ||
-      key === "timePosition"
+      key === "time Position"
     ) {
       return;
     } else {

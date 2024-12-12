@@ -15,7 +15,7 @@ const SelectedFlightPanel = ({
 
   const handleClose = () => {
     setSelectedMarker(null);
-    mapRef.current.setView([44.0, -72.7], 8);
+    // mapRef.current.setView([44.0, -72.7], 8);
   };
 
   if (selectedMarker){
@@ -39,10 +39,13 @@ const SelectedFlightPanel = ({
           pinnedFlights={pinnedFlights}
           setPinnedFlights={setPinnedFlights}
           markerToPin={selectedMarker}
+          leftPosition={8}
+          topPosition={8}
+          positionType={"absolute"}
         />
         <PanelHeader selectedMarker={selectedMarker} />
         <CloseSelectedFlightPanel handleClose={handleClose} />
-        <FlightDetails marker={selectedMarker}/>
+        <FlightDetails marker={selectedMarker} mapRef={mapRef}/>
       </Paper>
     )
   );  
