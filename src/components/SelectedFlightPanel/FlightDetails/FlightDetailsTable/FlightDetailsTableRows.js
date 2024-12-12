@@ -1,3 +1,6 @@
+import { TableRow } from "@mui/material";
+import TableCell from '@mui/material/TableCell';
+
 export function FlightDetailsTableRows({ marker, ContactTimeDifference }) {
   return Object.entries(marker).map(([key, value], index) => {
 
@@ -17,42 +20,42 @@ export function FlightDetailsTableRows({ marker, ContactTimeDifference }) {
 
     if (key === "last Contact") {
       return (
-        <tr key={index}>
-          <td>{key.toUpperCase().replace("_", " ")}</td>
-          <td>{ContactTimeDifference}s</td>
-        </tr>
+        <TableRow key={index}>
+          <TableCell>{key.toUpperCase().replace("_", " ")}</TableCell>
+          <TableCell>{ContactTimeDifference}s</TableCell>
+        </TableRow>
       );
     } else if (key === "true Track") {
       return (
-        <tr key={index}>
-          <td>{key.toUpperCase().replace("_", " ")}</td>
-          <td>{value}°</td>
-        </tr>
+        <TableRow key={index}>
+          <TableCell>{key.toUpperCase().replace("_", " ")}</TableCell>
+          <TableCell>{value}°</TableCell>
+        </TableRow>
       );
     } else if (key === "baro Altitude" || key === "geo Altitude") {
       if (value && value !== "N/A") {
         return (
-          <tr key={index}>
-            <td>{key.toUpperCase().replace("_", " ")}</td>
-            <td>
+          <TableRow key={index}>
+            <TableCell>{key.toUpperCase().replace("_", " ")}</TableCell>
+            <TableCell>
               {(value * 3.28084).toFixed(0)}ft ({value.toFixed(0)}m)
-            </td>
-          </tr>
+            </TableCell>
+          </TableRow>
         );
       } else {
         return (
-          <tr key={index}>
-            <td>{key.toUpperCase().replace("_", " ")}</td>
-            <td>{value}</td>
-          </tr>
+          <TableRow key={index}>
+            <TableCell>{key.toUpperCase().replace("_", " ")}</TableCell>
+            <TableCell>{value}</TableCell>
+          </TableRow>
         );
       }
     } else if (key === "velocity") {
       return (
-        <tr key={index}>
-          <td>{key.toUpperCase().replace("_", " ")}</td>
-          <td>{value}m/s</td>
-        </tr>
+        <TableRow key={index}>
+          <TableCell>{key.toUpperCase().replace("_", " ")}</TableCell>
+          <TableCell>{value}m/s</TableCell>
+        </TableRow>
       );
     } else if (
       key === "category" ||
@@ -66,10 +69,10 @@ export function FlightDetailsTableRows({ marker, ContactTimeDifference }) {
       return;
     } else {
       return (
-        <tr key={index}>
-          <td>{key.toUpperCase().replace("_", " ")}</td>
-          <td>{value}</td>
-        </tr>
+        <TableRow key={index}>
+          <TableCell>{key.toUpperCase().replace("_", " ")}</TableCell>
+          <TableCell>{value}</TableCell>
+        </TableRow>
       );
     }
   });

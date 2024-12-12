@@ -10,15 +10,10 @@ const PinnedFlightsList = ({ pinnedFlights, setPinnedFlights, mapRef, setCachedP
   return (
     <Paper
     className='pinnedFlightsPanelPaper'
-      style={{
-        position: "fixed",
-        top: "50px",
-        right: "50px",
-        zIndex: 1000,
-        padding: "20px",
-        minWidth: "300px",
-        maxHeight: "80vh", // Set a maximum height to prevent overflow
-      }}
+      // style={{
+      //   width: "100%",
+      //   height: "100%"
+      // }}
     >
       <Typography variant="h6" style={{ marginBottom: "10px" }}>
         Pinned Flights

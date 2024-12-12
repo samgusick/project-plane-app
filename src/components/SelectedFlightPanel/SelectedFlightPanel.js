@@ -25,14 +25,14 @@ const SelectedFlightPanel = ({
     selectedMarker &&
     (
       <Paper
-        style={{
-          position: "fixed",
-          bottom: "50px",
-          left: "50px",
-          zIndex: 1000,
-          padding: "20px",
-          maxWidth: "300px",
-        }}
+        // style={{
+        //   position: "fixed",
+        //   bottom: "50px",
+        //   left: "50px",
+        //   zIndex: 1000,
+        //   padding: "20px",
+        //   maxWidth: "300px",
+        // }}
         elevation={4}
       >
         
@@ -41,9 +41,9 @@ const SelectedFlightPanel = ({
           setPinnedFlights={setPinnedFlights}
           setCachedPinnedPlaneData={setCachedPinnedPlaneData}
           markerToPin={selectedMarker}
-          leftPosition={8}
-          topPosition={8}
-          positionType={"absolute"}
+          // leftPosition={8}
+          // topPosition={8}
+          // positionType={"absolute"}
         />
         <PanelHeader selectedMarker={selectedMarker} />
         <CloseSelectedFlightPanel handleClose={handleClose} />

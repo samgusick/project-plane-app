@@ -1,11 +1,11 @@
 td {
-  font-size: small;
+  /* font-size: small; */
   text-align: left;
 }
 
-h1 {
+/* h1 {
   font-size: medium;
-}
+} */
 
 #flightDetailsTable {
   margin: auto;

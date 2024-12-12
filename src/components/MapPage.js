@@ -9,6 +9,7 @@ import { usePolling } from "./APIPollingHook";
 import { fetchOpenSkyData } from "./fetchOpenSkyData";
 import betaLogoShadow from "../images/beta_air_llc_logo_shadow.png";
 import betaLogoOrange from "../images/beta_air_llc_logo_shadow_orange.png";
+import { Grid2 } from "@mui/material";
 
 const MapPage = () => {
   const [selectedMarker, setSelectedMarker] = useState(null);
@@ -44,21 +45,19 @@ const MapPage = () => {
         const updatedCache = pinnedFlights.map((icao) => {
           // Find the latest plane data for the pinned flight
           const latestPlane = planeData.find((plane) => plane.icao24 === icao);
-  
+
           // Check if it's already in the cache
           const cachedPlane = prevCache.find((plane) => plane.icao24 === icao);
-  
+
           // Return the latest plane data if found, otherwise keep the cached one
           return latestPlane || cachedPlane;
         });
-  
+
         // Filter out any cached planes that are no longer in pinnedFlights
         return updatedCache.filter(Boolean); // Ensure no null or undefined values
       });
     }
   }, [pinnedFlights, planeData]);
-  
-  
 
   const mapRef = useRef(null);
 
@@ -110,27 +109,62 @@ const MapPage = () => {
         markersRef={markersRef}
         selectedMarker={selectedMarker}
       />
+      <Grid2
+        container
+        spacing={10}
+        sx={{
+          position: "fixed", // Fix the position
+          top: "50%", // Move it vertically to the center
+          left: "50%", // Move it horizontally to the center
+          transform: "translate(-50%, -50%)", // Adjust positioning to truly center it
+          width: "90%", // 90% of the width
+          height: "90%", // 90% of the height
+          zIndex: 9999, // Ensure it's on top of other content
+          pointerEvents: "none", // Allows interactions behind the element
+        }}
+      >
+        <Grid2
+          size={3}
+          sx={{
+            height: "100%",
+            pointerEvents: "auto",
+            overflow: "auto",
+          }}
+        >
+          {selectedPlaneData && (
+            <SelectedFlightPanel
+              setSelectedMarker={setSelectedMarker}
+              selectedMarker={selectedPlaneData}
+              planeData={planeData}
+              setPinnedFlights={setPinnedFlights}
+              setCachedPinnedPlaneData={setCachedPinnedPlaneData}
+              pinnedFlights={cachedPinnedPlaneData}
+              mapRef={mapRef}
+            />
+          )}
+        </Grid2>
+        <Grid2 size={6}>
 
-      {cachedPinnedPlaneData && (
-        <PinnedFlightsPanel
-          pinnedFlights={cachedPinnedPlaneData}
-          setPinnedFlights={setPinnedFlights}
-          setCachedPinnedPlaneData={setCachedPinnedPlaneData}
-          planeData={cachedPinnedPlaneData}
-          mapRef={mapRef}
-        />
-      )}
-      {selectedPlaneData && (
-        <SelectedFlightPanel
-          setSelectedMarker={setSelectedMarker}
-          selectedMarker={selectedPlaneData}
-          planeData={planeData}
-          setPinnedFlights={setPinnedFlights}
-          setCachedPinnedPlaneData={setCachedPinnedPlaneData}
-          pinnedFlights={cachedPinnedPlaneData}
-          mapRef={mapRef}
-        />
-      )}
+        </Grid2>
+        <Grid2
+          size={3}
+          sx={{
+            height: "100%",
+            pointerEvents: "auto",
+            overflow: "auto",
+          }}
+        >
+          {cachedPinnedPlaneData && (
+            <PinnedFlightsPanel
+              pinnedFlights={cachedPinnedPlaneData}
+              setPinnedFlights={setPinnedFlights}
+              setCachedPinnedPlaneData={setCachedPinnedPlaneData}
+              planeData={cachedPinnedPlaneData}
+              mapRef={mapRef}
+            />
+          )}
+        </Grid2>
+      </Grid2>
       {!loadFlights && <ErrorPopup />}
     </div>
   );

@@ -6,11 +6,11 @@ export function CloseSelectedFlightPanel({ handleClose }) {
   return (
     <IconButton
       onClick={handleClose}
-      sx={{
-        position: "absolute",
-        top: 8,
-        right: 8,
-      }}
+      // sx={{
+      //   position: "absolute",
+      //   top: 8,
+      //   right: 8,
+      // }}
     >
       <CloseIcon />
     </IconButton>

@@ -2,7 +2,8 @@ import { PlaneOrientationImg } from "./PlaneOrientationImg";
 import React from "react";
 import { CountryFlag } from "./CountryFlag.js";
 import { FlightDetailsTableRows } from "./FlightDetailsTableRows.js";
-import { Box, Button } from "@mui/material";
+import { Box, Button, Paper, Table, TableBody, TableContainer, TableRow } from "@mui/material";
+import TableCell from '@mui/material/TableCell';
 export function FlightDetailsTable({
   marker,
   planeImage,
@@ -16,32 +17,34 @@ export function FlightDetailsTable({
 
   return (
     <>
-      <table id="flightDetailsTable">
-        <tbody>
-          <tr>
-            <td
+    <TableContainer component={Paper} style={{}}>
+      <Table sx={{ "& .MuiTableCell-root": { padding: 0.5 } }}>
+        <TableBody>
+          <TableRow>
+            <TableCell
               style={{
                 padding: "15px",
               }}
             >
               <CountryFlag marker={marker} planeData={planeData} />
-            </td>
-            <td
+            </TableCell>
+            <TableCell
               style={{
                 textAlign: "center",
                 padding: "15px",
               }}
             >
               <PlaneOrientationImg planeImage={planeImage} marker={marker} />
-            </td>
-          </tr>
+            </TableCell>
+          </TableRow>
 
           <FlightDetailsTableRows
             marker={marker}
             ContactTimeDifference={ContactTimeDifference}
           />
-        </tbody>
-      </table>
+        </TableBody>
+      </Table>
+      </TableContainer>
 
       {mapRef && marker && (<Button variant="contained" color="primary" className="findFlightButton" sx={{marginTop: "20px"}} onClick={() => recenterPlane(marker.latitude, marker.longitude)}>
         Recenter
