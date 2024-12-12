@@ -6,14 +6,19 @@ import {
 } from "@mui/material";
 import { map } from 'leaflet';
 
-const PinnedFlightsList = ({ pinnedFlights, setPinnedFlights, mapRef }) => {
+const PinnedFlightsList = ({ pinnedFlights, setPinnedFlights, mapRef, setCachedPinnedPlaneData }) => {
   return (
     <Paper
     className='pinnedFlightsPanelPaper'
-    sx={{
-      pointerEvents: "auto",
-      overflow: "auto",
-    }}
+      style={{
+        position: "fixed",
+        top: "50px",
+        right: "50px",
+        zIndex: 1000,
+        padding: "20px",
+        minWidth: "300px",
+        maxHeight: "80vh", // Set a maximum height to prevent overflow
+      }}
     >
       <Typography variant="h6" style={{ marginBottom: "10px" }}>
         Pinned Flights
@@ -21,6 +26,7 @@ const PinnedFlightsList = ({ pinnedFlights, setPinnedFlights, mapRef }) => {
       <div
         style={{
           overflowY: "auto", // Make this section scrollable
+          maxHeight: "calc(80vh - 40px)", // Adjust maxHeight to leave space for the header
         }}
       >
         {pinnedFlights.map((plane) => (
@@ -31,6 +37,7 @@ const PinnedFlightsList = ({ pinnedFlights, setPinnedFlights, mapRef }) => {
             pinnedFlights={pinnedFlights}
             setPinnedFlights={setPinnedFlights} // Pass setPinnedFlights to modify the list
             mapRef={mapRef}
+            setCachedPinnedPlaneData={setCachedPinnedPlaneData}
           />
         ))}
       </div>

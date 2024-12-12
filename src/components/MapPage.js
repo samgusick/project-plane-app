@@ -9,35 +9,56 @@ import { usePolling } from "./APIPollingHook";
 import { fetchOpenSkyData } from "./fetchOpenSkyData";
 import betaLogoShadow from "../images/beta_air_llc_logo_shadow.png";
 import betaLogoOrange from "../images/beta_air_llc_logo_shadow_orange.png";
-import { Grid2 } from "@mui/material";
 
 const MapPage = () => {
   const [selectedMarker, setSelectedMarker] = useState(null);
   const [pinnedFlights, setPinnedFlights] = useState([]);
   const [loadFlights, setLoadFlights] = useState(true);
   const [planeData, setPlaneData] = useState(null);
+  const [cachedPinnedPlaneData, setCachedPinnedPlaneData] = useState([]); // new state for cached data
 
   const markersRef = useRef({}); // Use an object to track markers by icao24
 
   const greyIcon = L.icon({
-    iconUrl: betaLogoShadow,
+    iconUrl: betaLogoShadow, // Ensure this variable is defined
     iconSize: [84, 65],
     iconAnchor: [42, 32.5],
   });
 
   const orangeIcon = L.icon({
-    iconUrl: betaLogoOrange,
+    iconUrl: betaLogoOrange, // Ensure this variable is defined
     iconSize: [84, 65],
     iconAnchor: [42, 32.5],
   });
 
   const data = usePolling(fetchOpenSkyData, 30000);
 
-  
-
   useEffect(() => {
     setPlaneData(data);
   }, [data]);
+
+  useEffect(() => {
+    if (pinnedFlights && planeData) {
+      setCachedPinnedPlaneData((prevCache) => {
+        // Update existing cached data and add new data
+        const updatedCache = pinnedFlights.map((icao) => {
+          // Find the latest plane data for the pinned flight
+          const latestPlane = planeData.find((plane) => plane.icao24 === icao);
+  
+          // Check if it's already in the cache
+          const cachedPlane = prevCache.find((plane) => plane.icao24 === icao);
+  
+          // Return the latest plane data if found, otherwise keep the cached one
+          return latestPlane || cachedPlane;
+        });
+  
+        // Filter out any cached planes that are no longer in pinnedFlights
+        return updatedCache.filter(Boolean); // Ensure no null or undefined values
+      });
+    }
+  }, [pinnedFlights, planeData]);
+  
+  
 
   const mapRef = useRef(null);
 
@@ -65,13 +86,6 @@ const MapPage = () => {
       ? planeData.find((plane) => plane.icao24 === selectedMarker)
       : null;
 
-  const NewPinnedPlaneData =
-    planeData && pinnedFlights
-      ? planeData.filter((plane) => pinnedFlights.includes(plane.icao24))
-      : [];
-
-  // Check if any of the planes in NewPinnedPlaneData are not in the pinnedFlightsCache
-
   return (
     <div style={{ height: "100vh", width: "100vw", position: "relative" }}>
       <Helmet>
@@ -97,11 +111,12 @@ const MapPage = () => {
         selectedMarker={selectedMarker}
       />
 
-      {NewPinnedPlaneData && (
+      {cachedPinnedPlaneData && (
         <PinnedFlightsPanel
-          pinnedFlights={NewPinnedPlaneData}
+          pinnedFlights={cachedPinnedPlaneData}
           setPinnedFlights={setPinnedFlights}
-          planeData={planeData}
+          setCachedPinnedPlaneData={setCachedPinnedPlaneData}
+          planeData={cachedPinnedPlaneData}
           mapRef={mapRef}
         />
       )}
@@ -111,7 +126,8 @@ const MapPage = () => {
           selectedMarker={selectedPlaneData}
           planeData={planeData}
           setPinnedFlights={setPinnedFlights}
-          pinnedFlights={NewPinnedPlaneData}
+          setCachedPinnedPlaneData={setCachedPinnedPlaneData}
+          pinnedFlights={cachedPinnedPlaneData}
           mapRef={mapRef}
         />
       )}

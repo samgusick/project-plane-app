@@ -8,6 +8,7 @@ export function PinnedFlightAccordionSummary({
   pinnedFlights,
   setPinnedFlights,
   plane,
+  setCachedPinnedPlaneData
 }) {
   return (
     <AccordionSummary
@@ -22,6 +23,7 @@ export function PinnedFlightAccordionSummary({
           setPinnedFlights={setPinnedFlights}
           leftPosition={0}
           topPosition={0}
+          setCachedPinnedPlaneData={setCachedPinnedPlaneData}
         />
       </Typography>
       <Typography

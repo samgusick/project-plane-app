@@ -1,7 +1,7 @@
 import { PanelHeader } from "./PanelHeader";
 import { PinSelectedFlight } from "./PinSelectedFlight";
 import React from "react";
-import { Grid2, Paper } from "@mui/material";
+import { Paper } from "@mui/material";
 import FlightDetails from "./FlightDetails/FlightDetails";
 import { CloseSelectedFlightPanel } from "./CloseSelectedFlightPanel";
 
@@ -11,7 +11,9 @@ const SelectedFlightPanel = ({
   pinnedFlights,
   setPinnedFlights,
   mapRef,
+  setCachedPinnedPlaneData,
 }) => {
+
   const handleClose = () => {
     setSelectedMarker(null);
     // mapRef.current.setView([44.0, -72.7], 8);
@@ -37,6 +39,7 @@ const SelectedFlightPanel = ({
         <PinSelectedFlight
           pinnedFlights={pinnedFlights}
           setPinnedFlights={setPinnedFlights}
+          setCachedPinnedPlaneData={setCachedPinnedPlaneData}
           markerToPin={selectedMarker}
           leftPosition={8}
           topPosition={8}
