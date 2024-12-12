@@ -13,7 +13,7 @@ import {
 import DeleteIcon from "@mui/icons-material/Delete";
 import FlightDetails from "../../SelectedFlightPanel/FlightDetails/FlightDetails";
 import { PinnedFlightAccordionSummary } from "./PinnedFlightAccordionSummary";
-export function PinnedFlightsAccordion({ pinnedFlights, setPinnedFlights, plane, mapRef }) {
+export function PinnedFlightsAccordion({ pinnedFlights, setPinnedFlights, plane, mapRef, setCachedPinnedPlaneData}) {
   
   // const selectedPlaneData = planeData && callsign
   // ? planeData.find((plane) => plane.callsign === callsign)
@@ -25,7 +25,7 @@ export function PinnedFlightsAccordion({ pinnedFlights, setPinnedFlights, plane,
 
     return (
       <Accordion>
-        <PinnedFlightAccordionSummary pinnedFlights={pinnedFlights} setPinnedFlights={setPinnedFlights} plane={plane}/>
+        <PinnedFlightAccordionSummary pinnedFlights={pinnedFlights} setPinnedFlights={setPinnedFlights} plane={plane} setCachedPinnedPlaneData={setCachedPinnedPlaneData}/>
         <AccordionDetails>
           <FlightDetails marker={plane} mapRef={mapRef} />
           <FlightLog />

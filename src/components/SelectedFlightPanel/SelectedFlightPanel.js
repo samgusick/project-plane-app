@@ -11,6 +11,7 @@ const SelectedFlightPanel = ({
   pinnedFlights,
   setPinnedFlights,
   mapRef,
+  setCachedPinnedPlaneData,
 }) => {
 
   const handleClose = () => {
@@ -38,6 +39,7 @@ const SelectedFlightPanel = ({
         <PinSelectedFlight
           pinnedFlights={pinnedFlights}
           setPinnedFlights={setPinnedFlights}
+          setCachedPinnedPlaneData={setCachedPinnedPlaneData}
           markerToPin={selectedMarker}
           leftPosition={8}
           topPosition={8}

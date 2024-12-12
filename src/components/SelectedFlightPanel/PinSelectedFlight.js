@@ -5,6 +5,7 @@ import { IconButton } from "@mui/material";
 export function PinSelectedFlight({
   pinnedFlights,
   setPinnedFlights,
+  setCachedPinnedPlaneData,
   markerToPin,
   leftPosition,
   topPosition,
@@ -13,19 +14,25 @@ export function PinSelectedFlight({
   const handleTogglePinnedFlights = () => {
     if (setPinnedFlights) {
       setPinnedFlights((prev) => {
-        // Check if the selectedMarker is already in pinnedFlights
-        if (prev.some((icao24) => icao24 === markerToPin.icao24)) {
-          // Remove the selectedMarker
-          return prev.filter(
-            (icao24) => icao24 !== markerToPin.icao24
+        const isPinned = prev.some((icao24) => icao24 === markerToPin.icao24);
+  
+        // Update cachedPinnedPlaneData in sync with pinned flights
+        if (setCachedPinnedPlaneData) {
+          setCachedPinnedPlaneData((prevCached) =>
+            isPinned
+              ? prevCached.filter((plane) => plane.icao24 !== markerToPin.icao24)
+              : prevCached
           );
-        } else {
-          // Add the selectedMarker
-          return [...prev, markerToPin.icao24];
         }
+  
+        // Toggle the pin status in pinnedFlights
+        return isPinned
+          ? prev.filter((icao24) => icao24 !== markerToPin.icao24)
+          : [...prev, markerToPin.icao24];
       });
     }
   };
+  
 
   const [isPinned, setIsPinned] = useState(false);
 

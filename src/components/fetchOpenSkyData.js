@@ -21,7 +21,7 @@ export const fetchOpenSkyData = async () => {
 
   const { states } = await response.json();
 
-  console.log(states);
+  // console.log(states);
 
   if (!states) {
     return [];
