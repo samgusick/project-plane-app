@@ -49,7 +49,7 @@ export function FlightDetailsTableRows({ marker, ContactTimeDifference }) {
       key === "positionSource" ||
       key === "sensors" ||
       key === "onGround" ||
-      key === "icao" ||
+      key === "icao24" ||
       key === "timePosition"
     ) {
       return;
