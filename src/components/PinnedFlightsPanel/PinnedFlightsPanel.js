@@ -2,9 +2,10 @@ import { PinnedFlightsAccordion } from "./PinnedFlightsAccordion/PinnedFlightsAc
 import React from "react";
 import pinnedFlightExampleImg from "../../images/pinnedFlightExample.png";
 import Switch from "@mui/material/Switch";
-
+import PushPinIcon from "@mui/icons-material/PushPin";
 import { FormControlLabel, FormGroup, Paper, Typography } from "@mui/material";
 import { map } from "leaflet";
+
 
 const PinnedFlightsList = ({
   pinnedFlights,
@@ -65,9 +66,9 @@ const PinnedFlightsList = ({
       ) : (
         <>
           <Typography variant="h6" style={{ marginBottom: "10px" }}>
-            Pin Flights to add Flight Notes
+            Pin Flights
           </Typography>
-          <img src={pinnedFlightExampleImg}></img>
+          <Typography>Pin flights with the <PushPinIcon fontSize="small"></PushPinIcon> Icon</Typography>
         </>
       )}
     </Paper>
