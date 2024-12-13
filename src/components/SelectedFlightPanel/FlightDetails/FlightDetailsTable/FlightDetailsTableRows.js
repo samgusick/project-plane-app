@@ -1,3 +1,5 @@
+import { TableCell, TableRow } from "@mui/material";
+
 export function FlightDetailsTableRows({ marker, ContactTimeDifference }) {
   return Object.entries(marker).map(([key, value], index) => {
 
@@ -17,41 +19,41 @@ export function FlightDetailsTableRows({ marker, ContactTimeDifference }) {
 
     if (key === "last Contact") {
       return (
-        <tr key={index}>
-          <td>{key.toUpperCase().replace("_", " ")}</td>
-          <td>{ContactTimeDifference}s</td>
-        </tr>
+        <TableRow key={index}>
+          <TableCell>{key.toUpperCase().replace("_", " ")}</TableCell>
+          <TableCell>{ContactTimeDifference}s</TableCell>
+        </TableRow>
       );
     } else if (key === "true Track") {
       return (
         <tr key={index}>
-          <td>{key.toUpperCase().replace("_", " ")}</td>
-          <td>{value}°</td>
+          <TableCell>{key.toUpperCase().replace("_", " ")}</TableCell>
+          <TableCell>{value}°</TableCell>
         </tr>
       );
     } else if (key === "baro Altitude" || key === "geo Altitude") {
       if (value && value !== "N/A") {
         return (
           <tr key={index}>
-            <td>{key.toUpperCase().replace("_", " ")}</td>
-            <td>
+            <TableCell>{key.toUpperCase().replace("_", " ")}</TableCell>
+            <TableCell>
               {(value * 3.28084).toFixed(0)}ft ({value.toFixed(0)}m)
-            </td>
+            </TableCell>
           </tr>
         );
       } else {
         return (
           <tr key={index}>
-            <td>{key.toUpperCase().replace("_", " ")}</td>
-            <td>{value}</td>
+            <TableCell>{key.toUpperCase().replace("_", " ")}</TableCell>
+            <TableCell>{value}</TableCell>
           </tr>
         );
       }
     } else if (key === "velocity") {
       return (
         <tr key={index}>
-          <td>{key.toUpperCase().replace("_", " ")}</td>
-          <td>{value}m/s</td>
+          <TableCell>{key.toUpperCase().replace("_", " ")}</TableCell>
+          <TableCell>{value}m/s</TableCell>
         </tr>
       );
     } else if (
@@ -67,8 +69,8 @@ export function FlightDetailsTableRows({ marker, ContactTimeDifference }) {
     } else {
       return (
         <tr key={index}>
-          <td>{key.toUpperCase().replace("_", " ")}</td>
-          <td>{value}</td>
+          <TableCell>{key.toUpperCase().replace("_", " ")}</TableCell>
+          <TableCell>{value}</TableCell>
         </tr>
       );
     }

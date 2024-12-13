@@ -1,8 +1,14 @@
+import { Typography } from "@mui/material";
 import React from "react";
 export function PanelHeader({ selectedMarker }) {
 
   if (selectedMarker){
-    return <h1>{`Aircraft ${selectedMarker.icao24}`}</h1>;
+    return (
+      <>
+      <Typography variant="h6">Selected Aircraft</Typography>
+      <Typography>{`ICAO: ${selectedMarker.icao24}`}</Typography>
+      </>
+    );
 
   }
 }
