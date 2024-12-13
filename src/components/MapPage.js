@@ -9,6 +9,9 @@ import { usePolling } from "./APIPollingHook";
 import { fetchOpenSkyData } from "./fetchOpenSkyData";
 import betaLogoShadow from "../images/beta_air_llc_logo_shadow.png";
 import betaLogoOrange from "../images/beta_air_llc_logo_shadow_orange.png";
+import { Typography } from "@mui/material";
+import { Paper } from "@mui/material";
+import planeClickedImg from "../images/planeClickedImg.png";
 
 const MapPage = () => {
   const [selectedMarker, setSelectedMarker] = useState(null);
@@ -16,6 +19,9 @@ const MapPage = () => {
   const [loadFlights, setLoadFlights] = useState(true);
   const [planeData, setPlaneData] = useState(null);
   const [cachedPinnedPlaneData, setCachedPinnedPlaneData] = useState([]); // new state for cached data
+  const [isFirstPlaneClicked,setIsFirstPlaneClicked] = useState(false);
+  const [showPinnedFlightsOnly, setShowPinnedFlightsOnly] = useState(false); 
+
 
   const markersRef = useRef({}); // Use an object to track markers by icao24
 
@@ -33,9 +39,16 @@ const MapPage = () => {
 
   const data = usePolling(fetchOpenSkyData, 30000);
 
+
   useEffect(() => {
     setPlaneData(data);
   }, [data]);
+
+  useEffect(() => {
+    if (selectedMarker && !isFirstPlaneClicked) {
+      setIsFirstPlaneClicked(true);
+    }
+  }, [selectedMarker])
 
   useEffect(() => {
     if (pinnedFlights && planeData) {
@@ -44,21 +57,24 @@ const MapPage = () => {
         const updatedCache = pinnedFlights.map((icao) => {
           // Find the latest plane data for the pinned flight
           const latestPlane = planeData.find((plane) => plane.icao24 === icao);
-  
+
           // Check if it's already in the cache
           const cachedPlane = prevCache.find((plane) => plane.icao24 === icao);
-  
+
           // Return the latest plane data if found, otherwise keep the cached one
           return latestPlane || cachedPlane;
         });
-  
+
+        const UpdatedCacheAfterFilter = updatedCache.filter(Boolean);
+
+        if (updatedCache.length === 0) {
+          setShowPinnedFlightsOnly(false);
+        }
         // Filter out any cached planes that are no longer in pinnedFlights
-        return updatedCache.filter(Boolean); // Ensure no null or undefined values
+        return UpdatedCacheAfterFilter; // Ensure no null or undefined values
       });
     }
   }, [pinnedFlights, planeData]);
-  
-  
 
   const mapRef = useRef(null);
 
@@ -80,6 +96,7 @@ const MapPage = () => {
       }).addTo(mapInstance);
     }
   }, []);
+
 
   const selectedPlaneData =
     planeData && selectedMarker
@@ -104,13 +121,12 @@ const MapPage = () => {
       <Map
         greyIcon={greyIcon}
         orangeIcon={orangeIcon}
-        planeData={planeData}
+        planeData={showPinnedFlightsOnly ? cachedPinnedPlaneData : planeData}
         mapRef={mapRef}
         setSelectedMarker={setSelectedMarker}
         markersRef={markersRef}
         selectedMarker={selectedMarker}
       />
-
       {cachedPinnedPlaneData && (
         <PinnedFlightsPanel
           pinnedFlights={cachedPinnedPlaneData}
@@ -118,18 +134,34 @@ const MapPage = () => {
           setCachedPinnedPlaneData={setCachedPinnedPlaneData}
           planeData={cachedPinnedPlaneData}
           mapRef={mapRef}
+          setShowPinnedFlightsOnly={setShowPinnedFlightsOnly}
+          showPinnedFlightsOnly={showPinnedFlightsOnly}
         />
       )}
-      {selectedPlaneData && (
+      {isFirstPlaneClicked ? ( selectedMarker &&
         <SelectedFlightPanel
-          setSelectedMarker={setSelectedMarker}
-          selectedMarker={selectedPlaneData}
-          planeData={planeData}
-          setPinnedFlights={setPinnedFlights}
-          setCachedPinnedPlaneData={setCachedPinnedPlaneData}
-          pinnedFlights={cachedPinnedPlaneData}
-          mapRef={mapRef}
-        />
+        setSelectedMarker={setSelectedMarker}
+        selectedMarker={selectedPlaneData}
+        planeData={planeData}
+        setPinnedFlights={setPinnedFlights}
+        setCachedPinnedPlaneData={setCachedPinnedPlaneData}
+        pinnedFlights={cachedPinnedPlaneData}
+        mapRef={mapRef}
+      />
+      ) : (
+        <Paper
+        style={{
+          position: "fixed",
+          bottom: "50px",
+          left: "50px",
+          zIndex: 1000,
+          padding: "20px",
+        }}
+        elevation={4}
+      >
+        <Typography variant="h6">Select a Plane to Start!</Typography>
+        <img src={planeClickedImg}></img>
+        </Paper>
       )}
       {!loadFlights && <ErrorPopup />}
     </div>

@@ -1,15 +1,21 @@
-import { PinnedFlightsAccordion } from './PinnedFlightsAccordion/PinnedFlightsAccordion';
+import { PinnedFlightsAccordion } from "./PinnedFlightsAccordion/PinnedFlightsAccordion";
 import React from "react";
-import {
-  Paper,
-  Typography,
-} from "@mui/material";
-import { map } from 'leaflet';
+import pinnedFlightExampleImg from "../../images/pinnedFlightExample.png";
+import Switch from "@mui/material/Switch";
 
-const PinnedFlightsList = ({ pinnedFlights, setPinnedFlights, mapRef, setCachedPinnedPlaneData }) => {
+import { FormControlLabel, FormGroup, Paper, Typography } from "@mui/material";
+import { map } from "leaflet";
+
+const PinnedFlightsList = ({
+  pinnedFlights,
+  setPinnedFlights,
+  mapRef,
+  setCachedPinnedPlaneData,
+  setShowPinnedFlightsOnly,
+}) => {
   return (
     <Paper
-    className='pinnedFlightsPanelPaper'
+      className="pinnedFlightsPanelPaper"
       style={{
         position: "fixed",
         top: "50px",
@@ -20,27 +26,50 @@ const PinnedFlightsList = ({ pinnedFlights, setPinnedFlights, mapRef, setCachedP
         maxHeight: "80vh", // Set a maximum height to prevent overflow
       }}
     >
-      <Typography variant="h6" style={{ marginBottom: "10px" }}>
-        Pinned Flights
-      </Typography>
-      <div
-        style={{
-          overflowY: "auto", // Make this section scrollable
-          maxHeight: "calc(80vh - 40px)", // Adjust maxHeight to leave space for the header
-        }}
-      >
-        {pinnedFlights.map((plane) => (
-          
-          <PinnedFlightsAccordion
-            key={plane.icao24}
-            plane={plane} // Use a unique key for each flight
-            pinnedFlights={pinnedFlights}
-            setPinnedFlights={setPinnedFlights} // Pass setPinnedFlights to modify the list
-            mapRef={mapRef}
-            setCachedPinnedPlaneData={setCachedPinnedPlaneData}
-          />
-        ))}
-      </div>
+      {pinnedFlights.length > 0 ? (
+        <>
+          <Typography variant="h6" style={{ marginBottom: "10px" }}>
+            Pinned Flights
+          </Typography>
+
+            <FormControlLabel
+              control={
+                <Switch
+                  onChange={() => {
+                    setShowPinnedFlightsOnly((prevValue) => !prevValue);
+                  }}
+                />
+              }
+              label="Pinned Flights Only"
+            />
+
+
+          <div
+            style={{
+              overflowY: "auto", // Make this section scrollable
+              maxHeight: "calc(80vh - 40px)", // Adjust maxHeight to leave space for the header
+            }}
+          >
+            {pinnedFlights.map((plane) => (
+              <PinnedFlightsAccordion
+                key={plane.icao24}
+                plane={plane} // Use a unique key for each flight
+                pinnedFlights={pinnedFlights}
+                setPinnedFlights={setPinnedFlights} // Pass setPinnedFlights to modify the list
+                mapRef={mapRef}
+                setCachedPinnedPlaneData={setCachedPinnedPlaneData}
+              />
+            ))}
+          </div>
+        </>
+      ) : (
+        <>
+          <Typography variant="h6" style={{ marginBottom: "10px" }}>
+            Pin Flights to add Flight Notes
+          </Typography>
+          <img src={pinnedFlightExampleImg}></img>
+        </>
+      )}
     </Paper>
   );
 };

@@ -13,17 +13,12 @@ const SelectedFlightPanel = ({
   mapRef,
   setCachedPinnedPlaneData,
 }) => {
-
   const handleClose = () => {
     setSelectedMarker(null);
     // mapRef.current.setView([44.0, -72.7], 8);
   };
 
-  if (selectedMarker){
-
   return (
-    selectedMarker &&
-    (
       <Paper
         style={{
           position: "fixed",
@@ -31,11 +26,9 @@ const SelectedFlightPanel = ({
           left: "50px",
           zIndex: 1000,
           padding: "20px",
-          maxWidth: "300px",
         }}
         elevation={4}
       >
-        
         <PinSelectedFlight
           pinnedFlights={pinnedFlights}
           setPinnedFlights={setPinnedFlights}
@@ -47,11 +40,9 @@ const SelectedFlightPanel = ({
         />
         <PanelHeader selectedMarker={selectedMarker} />
         <CloseSelectedFlightPanel handleClose={handleClose} />
-        <FlightDetails marker={selectedMarker} mapRef={mapRef}/>
+        <FlightDetails marker={selectedMarker} mapRef={mapRef} />
       </Paper>
-    )
-  );  
-  }
+  );
 };
 
 export default SelectedFlightPanel;
