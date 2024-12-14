@@ -7,9 +7,8 @@ export function PlaneOrientationImg({
   const planeAngle = marker.trueTrack || 0;
 
   return <img src={planeImage} alt="betaLogo" style={{
-    width: 75,
-    height: 75,
-    transform: `rotate(${planeAngle}deg)`
+    transform: `rotate(${planeAngle}deg)`,
+    objectFit: 'contain'
   }}></img>;
 }
   

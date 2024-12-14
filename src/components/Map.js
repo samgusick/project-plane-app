@@ -90,7 +90,7 @@ const Map = ({ mapRef, markersRef, planeData, setSelectedMarker, greyIcon, orang
         delete updatedMarkers[icao24];
         if (planeData && selectedMarker) {
           if (planeData.icao24 === selectedMarker.icao24) {
-            setSelectedMarker(null);
+            // setSelectedMarker(null);
   
           }
         }

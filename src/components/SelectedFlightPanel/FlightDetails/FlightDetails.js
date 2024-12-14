@@ -19,9 +19,9 @@ const FlightDetails = ({ marker, mapRef }) => {
   }, [marker]);
 
   return (
-    <Paper sx={{padding: "15px"}}>
+
       <FlightDetailsTable marker={marker} planeImage={planeImage} ContactTimeDifference={ContactTimeDifference} mapRef={mapRef} />
-    </Paper>
+
   );
 };
 

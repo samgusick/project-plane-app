@@ -207,6 +207,7 @@ export function CountryFlag({ marker, planeData }) {
     (<img
       style={{
         border: "1px solid",
+        objectFit: "contain"
       }}
       alt={marker.originCountry}
       src={`http://purecatamphetamine.github.io/country-flag-icons/3x2/${markerCountry}.svg`}

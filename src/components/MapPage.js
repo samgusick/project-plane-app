@@ -45,6 +45,7 @@ const MapPage = () => {
   }, [data]);
 
   useEffect(() => {
+    console.log(selectedMarker);
     if (selectedMarker && !isFirstPlaneClicked) {
       setIsFirstPlaneClicked(true);
     }
@@ -103,6 +104,11 @@ const MapPage = () => {
       ? planeData.find((plane) => plane.icao24 === selectedMarker)
       : null;
 
+  const cachedSelectedPlaneData =
+  cachedPinnedPlaneData && selectedMarker
+    ? cachedPinnedPlaneData.find((plane) => plane.icao24 === selectedMarker)
+    : null;
+
   return (
     <div style={{ height: "100vh", width: "100vw", position: "relative" }}>
       <Helmet>
@@ -129,6 +135,7 @@ const MapPage = () => {
       />
       {cachedPinnedPlaneData && (
         <PinnedFlightsPanel
+          setSelectedMarker={setSelectedMarker}
           pinnedFlights={cachedPinnedPlaneData}
           setPinnedFlights={setPinnedFlights}
           setCachedPinnedPlaneData={setCachedPinnedPlaneData}
@@ -141,8 +148,7 @@ const MapPage = () => {
       {isFirstPlaneClicked ? ( selectedMarker &&
         <SelectedFlightPanel
         setSelectedMarker={setSelectedMarker}
-        selectedMarker={selectedPlaneData}
-        planeData={planeData}
+        selectedMarker={cachedSelectedPlaneData ? cachedSelectedPlaneData : selectedPlaneData}
         setPinnedFlights={setPinnedFlights}
         setCachedPinnedPlaneData={setCachedPinnedPlaneData}
         pinnedFlights={cachedPinnedPlaneData}

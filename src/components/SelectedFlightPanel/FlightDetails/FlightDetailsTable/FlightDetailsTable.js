@@ -38,7 +38,7 @@ export function FlightDetailsTable({
     <ThemeProvider theme={theme}>
       <Table>
         <TableBody>
-          <TableRow>
+          {/* <TableRow>
             <TableCell
               style={{
                 padding: "15px",
@@ -54,7 +54,7 @@ export function FlightDetailsTable({
             >
               <PlaneOrientationImg planeImage={planeImage} marker={marker} />
             </TableCell>
-          </TableRow>
+          </TableRow> */}
 
           <FlightDetailsTableRows
             marker={marker}
@@ -63,7 +63,7 @@ export function FlightDetailsTable({
         </TableBody>
       </Table>
 
-      {mapRef && marker && (
+      {/* {mapRef && marker && (
         <Button
           variant="contained"
           color="primary"
@@ -73,7 +73,7 @@ export function FlightDetailsTable({
         >
           Recenter
         </Button>
-      )}
+      )} */}
     </ThemeProvider>
   );
 }

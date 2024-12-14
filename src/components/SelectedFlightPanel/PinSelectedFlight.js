@@ -10,6 +10,7 @@ export function PinSelectedFlight({
   leftPosition,
   topPosition,
   positionType,
+  edgeType
 }) {
   const handleTogglePinnedFlights = () => {
     if (setPinnedFlights) {
@@ -48,6 +49,7 @@ export function PinSelectedFlight({
       color={isPinned ? "primary" : "default"} // Conditional color based on isPinned
       aria-label="toggle-pin"
       onClick={handleTogglePinnedFlights}
+      edge={edgeType ? edgeType : false}
       sx={{
         position: positionType,
         top: topPosition,
