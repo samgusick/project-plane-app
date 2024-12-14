@@ -18,7 +18,7 @@ const SelectedFlightPanel = ({
     // mapRef.current.setView([44.0, -72.7], 8);
   };
 
-  return (
+  return (selectedMarker &&
       <Paper
         style={{
           position: "fixed",

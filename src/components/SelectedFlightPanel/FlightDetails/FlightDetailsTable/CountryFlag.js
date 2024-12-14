@@ -1,3 +1,5 @@
+import { Typography } from "@mui/material";
+
 export function CountryFlag({ marker, planeData }) {
   const iso3166Countries = {
     Afghanistan: "AF",
@@ -197,15 +199,17 @@ export function CountryFlag({ marker, planeData }) {
     Zimbabwe: "ZW",
   };
 
-  const markerCountry = iso3166Countries[marker.originCountry];
+  const markerCountry = iso3166Countries[marker.originCountry] ? iso3166Countries[marker.originCountry] : "N/A";
 
   return (
-    <img
+
+      (markerCountry !== "N/A") ? 
+    (<img
       style={{
         border: "1px solid",
       }}
       alt={marker.originCountry}
       src={`http://purecatamphetamine.github.io/country-flag-icons/3x2/${markerCountry}.svg`}
-    />
+    />) : (<Typography>N/A</Typography>)
   );
 }

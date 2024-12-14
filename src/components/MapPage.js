@@ -37,7 +37,7 @@ const MapPage = () => {
     iconAnchor: [42, 32.5],
   });
 
-  const data = usePolling(fetchOpenSkyData, 30000);
+  const data = usePolling(fetchOpenSkyData, 15000);
 
 
   useEffect(() => {
