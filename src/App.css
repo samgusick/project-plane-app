@@ -18,3 +18,83 @@ td {
 /* .pinnedFlightsPanelPaper {
   border: black solid 1px;
 } */
+
+
+.selectedFlightPanel {
+  position: fixed;
+  bottom: 50px;
+  left: 50px;
+  z-index: 1000;
+  padding: 20px;
+  width: 340px;
+  overflow: hidden;
+}
+
+.countdownPanel {
+  position: fixed;
+  z-index: 1000;
+  text-align: center;
+  right: 50px;
+  bottom: 50px;
+  padding: 10px;
+  width: 200px;
+}
+
+.pinnedFlightsPanel {
+  position: fixed;
+  top: 50px;
+  left: 50px;
+  z-index: 1000;
+  padding: 20px;
+  width: 340px;
+  overflow: hidden;
+}
+
+
+@media (max-width: 850px) {
+  .selectedFlightPanel {
+    position: fixed;
+    bottom: 0px;
+    left: 0px;
+    z-index: 1000;
+    padding: 20px;
+    width: 340px;
+    transform: scale(0.8);
+    overflow: hidden;
+  }
+
+  .pinnedFlightsPanel {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    z-index: 1000;
+    padding: 20px;
+    width: 340px;
+    transform: scale(0.8);
+    overflow: hidden;
+  }
+
+  .countdownPanel {
+    visibility: hidden;
+  }
+}
+
+@media (max-height: 550px) {
+  .pinnedFlightsPanel {
+    transform: scale(0.4);
+    top: 50px;
+    left: -100px;
+  }
+
+  .selectedFlightPanel {
+    transform: scale(0.4);
+    bottom: -100px;
+    left: -100px;
+  }
+}
+
+
+
+
+
+

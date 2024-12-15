@@ -53,7 +53,7 @@ const Map = ({
         zoom: 8,
         dragging: true,
         doubleClickZoom: true,
-        zoomControl: true,
+        zoomControl: false,
         scrollWheelZoom: true,
       });
       mapRef.current = mapInstance;

@@ -47,7 +47,7 @@ export function FlightDetailsTableRows({ marker, ContactTimeDifference }) {
           </tr>
         );
       }
-    } else if (key === "velocity") {
+    } else if (key === "velocity" || key === "vertical Rate") {
       return (
         <tr key={index}>
           <TableCell>{key.toUpperCase().replace("_", " ")}</TableCell>
@@ -60,8 +60,8 @@ export function FlightDetailsTableRows({ marker, ContactTimeDifference }) {
       key === "position Source" ||
       key === "sensors" ||
       key === "on Ground" ||
-      key === "icao24" ||
-      key === "time Position"
+      key === "time Position" || 
+      key === "callsign"
     ) {
       return;
     } else {

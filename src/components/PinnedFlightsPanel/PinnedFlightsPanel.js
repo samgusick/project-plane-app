@@ -19,16 +19,7 @@ const PinnedFlightsList = ({
 }) => {
   return (
     <Paper
-      className="pinnedFlightsPanelPaper"
-      style={{
-        position: "fixed",
-        top: "50px",
-        left: "50px",
-        zIndex: 1000,
-        padding: "20px",
-        width: "20vw",
-        height: "38vh", // Set a maximum height to prevent overflow
-      }}
+      className="pinnedFlightsPanel"
     >
       {pinnedFlights.length > 0 ? (
         <>
@@ -50,7 +41,6 @@ const PinnedFlightsList = ({
           <div
             style={{
               overflowY: "auto", // Make this section scrollable
-              maxHeight: "calc(80vh - 40px)", // Adjust maxHeight to leave space for the header
             }}
           >
             <List sx={{ maxHeight: "30vh", padding: 0}}>

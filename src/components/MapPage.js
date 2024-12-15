@@ -12,6 +12,7 @@ import betaLogoOrange from "../images/beta_air_llc_logo_shadow_orange.png";
 import { Typography } from "@mui/material";
 import { Paper } from "@mui/material";
 import planeClickedImg from "../images/planeClickedImg.png";
+import Countdown from "./UpdateCountdown/Countdown";
 
 export const defaultMapCenter = [44.0, -72.7];
 
@@ -23,6 +24,7 @@ const MapPage = () => {
   const [cachedPinnedPlaneData, setCachedPinnedPlaneData] = useState([]); // new state for cached data
   const [isFirstPlaneClicked, setIsFirstPlaneClicked] = useState(false);
   const [showPinnedFlightsOnly, setShowPinnedFlightsOnly] = useState(false);
+  const [nextDataUpdateTime, setNextDataUpdateTime] = useState(null);
 
   const markersRef = useRef({}); // Use an object to track markers by icao24
 
@@ -42,6 +44,9 @@ const MapPage = () => {
 
   useEffect(() => {
     setPlaneData(data);
+    const now = new Date();
+    const time15SecondsLater = new Date(now.getTime() + 15 * 1000);
+    setNextDataUpdateTime(time15SecondsLater);
   }, [data]);
 
   useEffect(() => {
@@ -87,7 +92,11 @@ const MapPage = () => {
         doubleClickZoom: false,
         zoomControl: false,
         scrollWheelZoom: false,
+        
       });
+      
+      mapInstance.zoomControl.remove();
+
       mapRef.current = mapInstance;
 
       L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
@@ -122,6 +131,7 @@ const MapPage = () => {
           crossorigin=""
         ></script>
       </Helmet>
+      <Countdown futureTime={nextDataUpdateTime}/>
       <Map
         greyIcon={greyIcon}
         orangeIcon={orangeIcon}
@@ -161,17 +171,12 @@ const MapPage = () => {
         )
       ) : (
         <Paper
-          style={{
-            position: "fixed",
-            bottom: "50px",
-            left: "50px",
-            zIndex: 1000,
-            padding: "20px",
-            // height: "40vh", // Set a maximum height to prevent overflow
-            width: "20vw",
-            justifyContent: "center", // Horizontally center
-            alignItems: "center", // Vertically center
-          }}
+          className="selectedFlightPanel"
+          style={
+            {
+              textAlign: "center"
+            }
+          }
           elevation={4}
         >
           <Typography variant="h6">Select a Plane to Start!</Typography>

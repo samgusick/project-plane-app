@@ -11,7 +11,7 @@ import {
 import { PinSelectedFlight } from "./SelectedFlightPanel/PinSelectedFlight";
 import { CountryFlag } from "./SelectedFlightPanel/FlightDetails/FlightDetailsTable/CountryFlag";
 import { PlaneOrientationImg } from "./SelectedFlightPanel/FlightDetails/FlightDetailsTable/PlaneOrientationImg";
-import planeImage from "../images/beta_air_llc_logo.png";
+import planeImage from "../images/beta_air_llc_logo_shadow.png";
 export const PlaneListItem = ({
   pinnedFlights,
   setPinnedFlights,
@@ -49,7 +49,7 @@ export const PlaneListItem = ({
           </Box>
         </ListItemIcon>
 
-        <ListItemText primary={`${plane.callsign || "Callsign Unavailable"}`} />
+        <ListItemText primary={`${plane.callsign || "Callsign N/A"}`} />
       </ListItemButton>
     </ListItem>
   );
