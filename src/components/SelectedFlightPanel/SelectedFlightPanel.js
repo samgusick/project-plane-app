@@ -1,13 +1,8 @@
-import { PanelHeader } from "./PanelHeader";
-import { PinSelectedFlight } from "./PinSelectedFlight";
 import React from "react";
-import { Grid2, ListItem, ListItemText, Paper } from "@mui/material";
+import { Paper } from "@mui/material";
 import FlightDetails from "./FlightDetails/FlightDetails";
-import { CloseSelectedFlightPanel } from "./CloseSelectedFlightPanel";
-import { List, IconButton, ListItemAvatar, Avatar, Box } from "@mui/material";
-import { CountryFlag } from "./FlightDetails/FlightDetailsTable/CountryFlag";
-import { PlaneOrientationImg } from "./FlightDetails/FlightDetailsTable/PlaneOrientationImg";
-import planeImage from "../../images/beta_air_llc_logo_shadow.png";
+import { List, Typography } from "@mui/material";
+import { PlaneListItem } from "../PlaneListItem";
 
 const SelectedFlightPanel = ({
   setSelectedMarker,
@@ -17,10 +12,6 @@ const SelectedFlightPanel = ({
   mapRef,
   setCachedPinnedPlaneData,
 }) => {
-  const handleClose = () => {
-    setSelectedMarker(null);
-    // mapRef.current.setView([44.0, -72.7], 8);
-  };
 
   return (
     selectedMarker && (
@@ -31,42 +22,25 @@ const SelectedFlightPanel = ({
           left: "50px",
           zIndex: 1000,
           padding: "20px",
-          height: "40vh", // Set a maximum height to prevent overflow
+          height: "38vh", // Set a maximum height to prevent overflow
           width: "20vw",
+          overflow: "hidden"
         }}
         elevation={4}
       >
-
-            {/* <img
-              src={planeImage}
-              style={{ transform: `rotate(${selectedMarker.trueTrack}deg)`, objectFit: "contain" }}
-            />
-
-
-            <CountryFlag marker={selectedMarker}/> */}
-
-
+        <Typography variant="h6">
+            Selected Flight
+          </Typography>
         <List>
-          <ListItem
-            secondaryAction={
-              <PinSelectedFlight
-                pinnedFlights={pinnedFlights}
-                setPinnedFlights={setPinnedFlights}
-                setCachedPinnedPlaneData={setCachedPinnedPlaneData}
-                markerToPin={selectedMarker}
-              />
-            }
-          >
-            <ListItemAvatar>
-              <Avatar>
-                <CountryFlag marker={selectedMarker}/>
-              </Avatar>
-            </ListItemAvatar>
-            <ListItemText primary={selectedMarker.callsign} />
-          </ListItem>
+          <PlaneListItem 
+            pinnedFlights={pinnedFlights}
+            setPinnedFlights={setPinnedFlights}
+            setCachedPinnedPlaneData={setCachedPinnedPlaneData}
+            plane={selectedMarker}
+            setSelectedMarker={setSelectedMarker}
+            mapRef={mapRef}
+          />
         </List>
-
-        {/* <CloseSelectedFlightPanel handleClose={handleClose} /> */}
         <FlightDetails marker={selectedMarker} mapRef={mapRef} />
       </Paper>
     )

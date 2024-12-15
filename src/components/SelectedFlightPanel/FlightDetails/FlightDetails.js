@@ -1,6 +1,5 @@
 import { FlightDetailsTable } from './FlightDetailsTable/FlightDetailsTable.js';
 import React from "react";
-import { Paper} from "@mui/material";
 import planeImage from "../../../images/beta_air_llc_logo.png"
 import { useEffect, useState } from "react";
 

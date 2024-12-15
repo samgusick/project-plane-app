@@ -8,7 +8,7 @@ export function PlaneOrientationImg({
 
   return <img src={planeImage} alt="betaLogo" style={{
     transform: `rotate(${planeAngle}deg)`,
-    objectFit: 'contain'
+    height: "100%"
   }}></img>;
 }
   

@@ -1,29 +1,55 @@
-import React, { useEffect, useRef, useState } from "react";
-import L, { map, marker } from "leaflet";
+import React, { useEffect } from "react";
+import L from "leaflet";
 import "leaflet-rotatedmarker";
-import { OPENSKY_CREDENTIALS } from "../config/config";
-import { usePolling } from "./APIPollingHook";
-import { fetchOpenSkyData } from "./fetchOpenSkyData";
+import { defaultMapCenter } from "./MapPage";
 
-const Map = ({ mapRef, markersRef, planeData, setSelectedMarker, greyIcon, orangeIcon, selectedMarker }) => {
-  const [leafletMarkers, setLeafletMarkers] = useState({});
-  
-  const markersRefSetDefaultLogos = () => {
-    if (!selectedMarker) {
-      Object.values(markersRef.current).forEach((otherMarker) => {
-        otherMarker.setIcon(greyIcon);
-        otherMarker.on("mouseout", () => otherMarker.setIcon(greyIcon));
-      });
+const TILE_LAYER_URL = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
+const TILE_LAYER_ATTRIBUTION =
+  '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
+
+const Map = ({
+  mapRef,
+  markersRef,
+  planeData,
+  setSelectedMarker,
+  greyIcon,
+  orangeIcon,
+  selectedMarker,
+  pinnedFlights,
+}) => {
+
+  // Helper: Reset marker icons
+  const resetMarkerIcons = () => {
+    Object.values(markersRef.current).forEach((marker) => {
+      marker.setIcon(greyIcon);
+      marker.on("mouseout", () => marker.setIcon(greyIcon));
+    });
+  };
+
+  // Helper: Highlight selected marker
+  const highlightSelectedMarker = () => {
+    if (selectedMarker) {
+      resetMarkerIcons();
+      const marker = markersRef.current[selectedMarker];
+      if (marker) {
+        marker.off("mouseout"); // Remove mouseout to maintain orange icon
+        marker.setIcon(orangeIcon);
+      }
+    } else {
+      resetMarkerIcons();
     }
   };
 
+  // Effect: Handle selected marker updates
   useEffect(() => {
-    // console.log("rerender")
-    markersRefSetDefaultLogos();
-    // Initialize map instance if it doesn't already exist
+    highlightSelectedMarker();
+  }, [selectedMarker]);
+
+  // Effect: Initialize map and manage markers
+  useEffect(() => {
     if (!mapRef.current) {
       const mapInstance = L.map("map", {
-        center: [44.0, -72.7],
+        center: defaultMapCenter,
         zoom: 8,
         dragging: true,
         doubleClickZoom: true,
@@ -31,50 +57,31 @@ const Map = ({ mapRef, markersRef, planeData, setSelectedMarker, greyIcon, orang
         scrollWheelZoom: true,
       });
       mapRef.current = mapInstance;
-      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-        attribution:
-          '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+
+      L.tileLayer(TILE_LAYER_URL, {
+        attribution: TILE_LAYER_ATTRIBUTION,
       }).addTo(mapInstance);
     }
 
     if (!planeData) return;
-
-    
 
     const updatedMarkers = { ...markersRef.current };
 
     // Add or update markers
     planeData.forEach((plane) => {
       if (!updatedMarkers[plane.icao24]) {
-        const marker = L.marker([plane.latitude, plane.longitude], {
+        const newMarker = L.marker([plane.latitude, plane.longitude], {
           icon: greyIcon,
         }).addTo(mapRef.current);
 
-        marker.on("click", () => {
-          setSelectedMarker(plane.icao24);
+        // Attach events to the marker
+        newMarker
+          .on("click", () => setSelectedMarker(plane.icao24))
+          .on("mouseover", () => newMarker.setIcon(orangeIcon))
+          .on("mouseout", () => newMarker.setIcon(greyIcon));
 
-          Object.values(markersRef.current).forEach((otherMarker) => {
-            otherMarker.setIcon(greyIcon);
-            otherMarker.on("mouseout", () =>
-              otherMarker.setIcon(greyIcon)
-            );
-          });          
-
-          marker.off("mouseout");
-
-          marker.setIcon(orangeIcon);
-        });
-
-        marker.on("mouseover", () => {
-          marker.setIcon(orangeIcon);
-        });
-
-        marker.on("mouseout", () => {
-          marker.setIcon(greyIcon);
-        });
-        
-        marker.setRotationAngle(plane.trueTrack);
-        updatedMarkers[plane.icao24] = marker;
+        newMarker.setRotationAngle(plane.trueTrack);
+        updatedMarkers[plane.icao24] = newMarker;
       } else {
         // Update existing marker
         const marker = updatedMarkers[plane.icao24];
@@ -83,25 +90,21 @@ const Map = ({ mapRef, markersRef, planeData, setSelectedMarker, greyIcon, orang
       }
     });
 
-    // Remove markers no longer in planeData
+    // Remove markers for planes no longer in data and not pinned
     Object.keys(updatedMarkers).forEach((icao24) => {
-      if (!planeData.some((plane) => plane.icao24 === icao24)) {
+      if (
+        !planeData.some((plane) => plane.icao24 === icao24) &&
+        !pinnedFlights.includes(icao24)
+      ) {
         mapRef.current.removeLayer(updatedMarkers[icao24]);
         delete updatedMarkers[icao24];
-        if (planeData && selectedMarker) {
-          if (planeData.icao24 === selectedMarker.icao24) {
-            // setSelectedMarker(null);
-  
-          }
-        }
       }
     });
 
-    markersRef.current = updatedMarkers; // Update ref with current markers
-  }, [planeData, mapRef, selectedMarker]);
+    markersRef.current = updatedMarkers;
+  }, [planeData, mapRef, greyIcon, orangeIcon, setSelectedMarker]);
 
   return <div id="map" style={{ height: "100%", width: "100%" }} />;
 };
 
 export default Map;
-

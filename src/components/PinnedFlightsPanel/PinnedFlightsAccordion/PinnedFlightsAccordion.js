@@ -1,31 +1,26 @@
 import FlightLog from "./PinnedFlightNotes/FlightLog";
 import React from "react";
 
-import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
-  IconButton,
-  Typography,
-  List,
-  ListItemText,
-} from "@mui/material";
-import DeleteIcon from "@mui/icons-material/Delete";
+import { Accordion, AccordionDetails } from "@mui/material";
 import FlightDetails from "../../SelectedFlightPanel/FlightDetails/FlightDetails";
 import { PinnedFlightAccordionSummary } from "./PinnedFlightAccordionSummary";
-export function PinnedFlightsAccordion({ pinnedFlights, setPinnedFlights, plane, mapRef, setCachedPinnedPlaneData}) {
-  
-  // const selectedPlaneData = planeData && callsign
-  // ? planeData.find((plane) => plane.callsign === callsign)
-  // : null;
-  // console.log(callsign);
-  // console.log(selectedPlaneData);
 
+export function PinnedFlightsAccordion({
+  pinnedFlights,
+  setPinnedFlights,
+  plane,
+  mapRef,
+  setCachedPinnedPlaneData,
+}) {
   if (plane) {
-
     return (
       <Accordion>
-        <PinnedFlightAccordionSummary pinnedFlights={pinnedFlights} setPinnedFlights={setPinnedFlights} plane={plane} setCachedPinnedPlaneData={setCachedPinnedPlaneData}/>
+        <PinnedFlightAccordionSummary
+          pinnedFlights={pinnedFlights}
+          setPinnedFlights={setPinnedFlights}
+          plane={plane}
+          setCachedPinnedPlaneData={setCachedPinnedPlaneData}
+        />
         <AccordionDetails>
           <FlightDetails marker={plane} mapRef={mapRef} />
           <FlightLog />

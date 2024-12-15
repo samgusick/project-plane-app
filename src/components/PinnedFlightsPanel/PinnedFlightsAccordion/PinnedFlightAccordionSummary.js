@@ -1,6 +1,5 @@
 import React from "react";
-import { AccordionSummary, IconButton, Typography } from "@mui/material";
-import PushPinIcon from "@mui/icons-material/PushPin";
+import { AccordionSummary, Typography } from "@mui/material";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import { PinSelectedFlight } from "../../SelectedFlightPanel/PinSelectedFlight";
 

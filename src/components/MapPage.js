@@ -13,15 +13,16 @@ import { Typography } from "@mui/material";
 import { Paper } from "@mui/material";
 import planeClickedImg from "../images/planeClickedImg.png";
 
+export const defaultMapCenter = [44.0, -72.7];
+
 const MapPage = () => {
   const [selectedMarker, setSelectedMarker] = useState(null);
   const [pinnedFlights, setPinnedFlights] = useState([]);
   const [loadFlights, setLoadFlights] = useState(true);
   const [planeData, setPlaneData] = useState(null);
   const [cachedPinnedPlaneData, setCachedPinnedPlaneData] = useState([]); // new state for cached data
-  const [isFirstPlaneClicked,setIsFirstPlaneClicked] = useState(false);
-  const [showPinnedFlightsOnly, setShowPinnedFlightsOnly] = useState(false); 
-
+  const [isFirstPlaneClicked, setIsFirstPlaneClicked] = useState(false);
+  const [showPinnedFlightsOnly, setShowPinnedFlightsOnly] = useState(false);
 
   const markersRef = useRef({}); // Use an object to track markers by icao24
 
@@ -39,17 +40,15 @@ const MapPage = () => {
 
   const data = usePolling(fetchOpenSkyData, 15000);
 
-
   useEffect(() => {
     setPlaneData(data);
   }, [data]);
 
   useEffect(() => {
-    console.log(selectedMarker);
     if (selectedMarker && !isFirstPlaneClicked) {
       setIsFirstPlaneClicked(true);
     }
-  }, [selectedMarker])
+  }, [selectedMarker]);
 
   useEffect(() => {
     if (pinnedFlights && planeData) {
@@ -82,7 +81,7 @@ const MapPage = () => {
   useEffect(() => {
     if (!mapRef.current) {
       const mapInstance = L.map("map", {
-        center: [44.0, -72.7],
+        center: defaultMapCenter,
         zoom: 8,
         dragging: false,
         doubleClickZoom: false,
@@ -98,16 +97,15 @@ const MapPage = () => {
     }
   }, []);
 
-
   const selectedPlaneData =
     planeData && selectedMarker
       ? planeData.find((plane) => plane.icao24 === selectedMarker)
       : null;
 
   const cachedSelectedPlaneData =
-  cachedPinnedPlaneData && selectedMarker
-    ? cachedPinnedPlaneData.find((plane) => plane.icao24 === selectedMarker)
-    : null;
+    cachedPinnedPlaneData && selectedMarker
+      ? cachedPinnedPlaneData.find((plane) => plane.icao24 === selectedMarker)
+      : null;
 
   return (
     <div style={{ height: "100vh", width: "100vw", position: "relative" }}>
@@ -132,6 +130,7 @@ const MapPage = () => {
         setSelectedMarker={setSelectedMarker}
         markersRef={markersRef}
         selectedMarker={selectedMarker}
+        pinnedFlights={pinnedFlights}
       />
       {cachedPinnedPlaneData && (
         <PinnedFlightsPanel
@@ -145,28 +144,44 @@ const MapPage = () => {
           showPinnedFlightsOnly={showPinnedFlightsOnly}
         />
       )}
-      {isFirstPlaneClicked ? ( selectedMarker &&
-        <SelectedFlightPanel
-        setSelectedMarker={setSelectedMarker}
-        selectedMarker={cachedSelectedPlaneData ? cachedSelectedPlaneData : selectedPlaneData}
-        setPinnedFlights={setPinnedFlights}
-        setCachedPinnedPlaneData={setCachedPinnedPlaneData}
-        pinnedFlights={cachedPinnedPlaneData}
-        mapRef={mapRef}
-      />
+      {isFirstPlaneClicked ? (
+        selectedMarker && (
+          <SelectedFlightPanel
+            setSelectedMarker={setSelectedMarker}
+            selectedMarker={
+              cachedSelectedPlaneData
+                ? cachedSelectedPlaneData
+                : selectedPlaneData
+            }
+            setPinnedFlights={setPinnedFlights}
+            setCachedPinnedPlaneData={setCachedPinnedPlaneData}
+            pinnedFlights={cachedPinnedPlaneData}
+            mapRef={mapRef}
+          />
+        )
       ) : (
         <Paper
-        style={{
-          position: "fixed",
-          bottom: "50px",
-          left: "50px",
-          zIndex: 1000,
-          padding: "20px",
-        }}
-        elevation={4}
-      >
-        <Typography variant="h6">Select a Plane to Start!</Typography>
-        <img src={planeClickedImg}></img>
+          style={{
+            position: "fixed",
+            bottom: "50px",
+            left: "50px",
+            zIndex: 1000,
+            padding: "20px",
+            // height: "40vh", // Set a maximum height to prevent overflow
+            width: "20vw",
+            justifyContent: "center", // Horizontally center
+            alignItems: "center", // Vertically center
+          }}
+          elevation={4}
+        >
+          <Typography variant="h6">Select a Plane to Start!</Typography>
+          <img
+            src={planeClickedImg}
+            style={{
+              maxWidth: "100%",
+              maxHeight: "100%",
+            }}
+          ></img>
         </Paper>
       )}
       {!loadFlights && <ErrorPopup />}

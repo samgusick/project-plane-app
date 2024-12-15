@@ -4,9 +4,7 @@ export function FlightDetailsTableRows({ marker, ContactTimeDifference }) {
   return Object.entries(marker).map(([key, value], index) => {
 
     const formatKey = (inputString) => {
-      // // Capitalize the first letter
-      // const capitalizedString = inputString.charAt(0).toUpperCase() + inputString.slice(1);
-    
+      
       // Add spaces before capital letters
       return inputString.replace(/([A-Z])/g, ' $1').trim();
     }
