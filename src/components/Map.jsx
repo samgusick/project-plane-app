@@ -1,7 +1,8 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import L from "leaflet";
 import "leaflet-rotatedmarker";
 import { defaultMapCenter } from "./MapPage";
+
 const TILE_LAYER_URL = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
 const TILE_LAYER_ATTRIBUTION =
   '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Data from <a href="https://opensky-network.org">The OpenSky Network</a>';
@@ -16,7 +17,8 @@ const Map = ({
   selectedMarker,
   pinnedFlights,
 }) => {
-  // Helper: Initialize the map if not already initialized
+  const planePositions = useRef({}); // Store plane positions for interpolation
+
   const initializeMap = () => {
     if (!mapRef.current) {
       const mapInstance = L.map("map", {
@@ -32,72 +34,46 @@ const Map = ({
       L.tileLayer(TILE_LAYER_URL, {
         attribution: TILE_LAYER_ATTRIBUTION,
       }).addTo(mapInstance);
-
-      // Add grey-out effect for the entire map using an overlay
-      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-        opacity: 1, // Grey out everything by setting opacity to 0.5
-      }).addTo(mapInstance);
-
-      // Fetch the GeoJSON file and add it to the map
-      fetch("/VTData.geojson")
-        .then((response) => response.json()) // Parse the GeoJSON file
-        .then((geojsonData) => {
-          // Add the GeoJSON data to the map
-
-          L.geoJSON(geojsonData, {
-            style: (feature) => ({
-              fillOpacity: 0.1,
-              color: "darkgreen",
-              weight: 2,
-            })
-          }).addTo(mapInstance);
-        })
-        .catch((error) => console.error("Error loading GeoJSON file:", error));
-
-        // Fetch the GeoJSON file and add it to the map
-      fetch("/NHData.geojson")
-      .then((response) => response.json()) // Parse the GeoJSON file
-      .then((geojsonData) => {
-        // Add the GeoJSON data to the map
-
-        L.geoJSON(geojsonData, {
-          style: (feature) => ({
-            fillOpacity: 0.1,
-            color: "darkRed",
-            weight: 2,
-          })
-        }).addTo(mapInstance);
-      })
-      .catch((error) => console.error("Error loading GeoJSON file:", error));
     }
   };
 
-  // Helper: Reset all marker icons to the default grey icon
-  const resetMarkerIcons = () => {
-    Object.values(markersRef.current).forEach((marker) => {
-      marker.setIcon(greyIcon);
-      marker.on("mouseout", () => marker.setIcon(greyIcon));
+  const interpolatePosition = (start, angle, speed, timeElapsed) => {
+    const distance = speed * timeElapsed; // distance = speed * time
+    const deltaLat = (distance * Math.cos((angle * Math.PI) / 180)) / 111139; // Convert meters to degrees
+    const deltaLng =
+      (distance * Math.sin((angle * Math.PI) / 180)) /
+      (111139 * Math.cos((start.lat * Math.PI) / 180)); // Account for Earth's curvature
+    return {
+      lat: start.lat + deltaLat,
+      lng: start.lng + deltaLng,
+    };
+  };
+
+  const animateMarkers = () => {
+    const updatedMarkers = markersRef.current;
+    const now = Date.now();
+
+    Object.keys(planePositions.current).forEach((icao24) => {
+      const { position, lastUpdate, angle, speed } = planePositions.current[icao24];
+      const elapsedTime = (now - lastUpdate) / 1000; // Convert to seconds
+
+      if (updatedMarkers[icao24]) {
+        const newPosition = interpolatePosition(position, angle, speed, elapsedTime);
+        updatedMarkers[icao24].setLatLng(newPosition);
+        position.lat = newPosition.lat;
+        position.lng = newPosition.lng;
+        planePositions.current[icao24].lastUpdate = now;
+      }
     });
+
+    requestAnimationFrame(animateMarkers);
   };
 
-  // Helper: Highlight the selected marker by changing its icon blue
-  const highlightSelectedMarker = () => {
-    if (!selectedMarker) return resetMarkerIcons();
-
-    resetMarkerIcons();
-    const marker = markersRef.current[selectedMarker];
-    if (marker) {
-      marker.off("mouseout"); // Prevent icon reset on mouseout
-      marker.setIcon(blueIcon);
-    }
-  };
-
-  // Helper: Add or update a marker on the map
   const updateMarker = (plane, updatedMarkers) => {
-    const { icao24, latitude, longitude, trueTrack } = plane;
+    const { icao24, latitude, longitude, trueTrack, velocity } = plane;
+    const newPosition = { lat: latitude, lng: longitude };
 
     if (!updatedMarkers[icao24]) {
-      // Create a new marker
       const newMarker = L.marker([latitude, longitude], { icon: greyIcon })
         .addTo(mapRef.current)
         .on("click", () => setSelectedMarker(icao24))
@@ -107,14 +83,51 @@ const Map = ({
       newMarker.setRotationAngle(trueTrack);
       updatedMarkers[icao24] = newMarker;
     } else {
-      // Update existing marker position and rotation
-      const marker = updatedMarkers[icao24];
-      marker.setLatLng([latitude, longitude]);
-      marker.setRotationAngle(trueTrack);
+      updatedMarkers[icao24].setLatLng(newPosition);
+      updatedMarkers[icao24].setRotationAngle(trueTrack);
     }
+
+    // Update position tracking
+    planePositions.current[icao24] = {
+      position: newPosition,
+      lastUpdate: Date.now(),
+      angle: trueTrack || 0,
+      speed: velocity || 0,
+    };
   };
 
-  // Helper: Remove markers that are no longer in the plane data or pinned flights
+  useEffect(() => {
+    initializeMap();
+
+    if (!planeData) return;
+
+    const updatedMarkers = { ...markersRef.current };
+
+    planeData.forEach((plane) => updateMarker(plane, updatedMarkers));
+    markersRef.current = updatedMarkers;
+
+    removeStaleMarkers(updatedMarkers);
+
+    // Start animation loop
+    if (Object.keys(planePositions.current).length > 0) {
+      requestAnimationFrame(animateMarkers);
+    }
+  }, [planeData]);
+
+  useEffect(() => {
+    // Update marker icons based on the selected marker
+    Object.keys(markersRef.current).forEach((icao24) => {
+      const marker = markersRef.current[icao24];
+      if (icao24 === selectedMarker) {
+        marker.off("mouseout");
+        marker.setIcon(blueIcon);
+      } else {
+        marker.on("mouseout", () => marker.setIcon(greyIcon));
+        marker.setIcon(greyIcon);
+      }
+    });
+  }, [selectedMarker]);
+
   const removeStaleMarkers = (updatedMarkers) => {
     Object.keys(updatedMarkers).forEach((icao24) => {
       if (
@@ -123,31 +136,10 @@ const Map = ({
       ) {
         mapRef.current.removeLayer(updatedMarkers[icao24]);
         delete updatedMarkers[icao24];
+        delete planePositions.current[icao24];
       }
     });
   };
-
-  // Effect: Highlight the selected marker whenever it changes
-  useEffect(() => {
-    highlightSelectedMarker();
-  }, [selectedMarker]);
-
-  // Effect: Initialize the map and update markers when plane data changes
-  useEffect(() => {
-    initializeMap();
-
-    if (!planeData) return;
-
-    const updatedMarkers = { ...markersRef.current };
-
-    // Add or update markers for each plane
-    planeData.forEach((plane) => updateMarker(plane, updatedMarkers));
-
-    // Remove markers that are no longer relevant
-    removeStaleMarkers(updatedMarkers);
-
-    markersRef.current = updatedMarkers;
-  }, [planeData, mapRef, greyIcon, blueIcon, setSelectedMarker, pinnedFlights]);
 
   return <div id="map" style={{ height: "100%", width: "100%" }} />;
 };

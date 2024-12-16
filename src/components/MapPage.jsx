@@ -29,6 +29,7 @@ const MapPage = () => {
   const markersRef = useRef({});
   const mapRef = useRef(null);
 
+
   // Icons for map markers
   const greyIcon = L.icon({
     iconUrl: betaLogoShadow,
@@ -42,9 +43,9 @@ const MapPage = () => {
     iconAnchor: [42, 32.5],
   });
 
-  const updateInterval = 15000;
+  const updateInterval = 30000;
   // Fetch data with polling
-  const data = usePolling(fetchOpenSkyData, 15000);
+  const data = usePolling(fetchOpenSkyData, 30000);
 
   // Update plane data and countdown timer
   useEffect(() => {
@@ -55,7 +56,6 @@ const MapPage = () => {
       if (APIFailed) {
         setAPIFailed(false);
       }
-      console.log(data);
       setPlaneData(data);
       setNextDataUpdateTime(new Date(Date.now() + updateInterval));
     }
