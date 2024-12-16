@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import L from "leaflet";
 import "leaflet-rotatedmarker";
 import { defaultMapCenter } from "./MapPage";
-
 const TILE_LAYER_URL = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
 const TILE_LAYER_ATTRIBUTION =
   '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Data from <a href="https://opensky-network.org">The OpenSky Network</a>';
@@ -17,7 +16,6 @@ const Map = ({
   selectedMarker,
   pinnedFlights,
 }) => {
-
   // Helper: Initialize the map if not already initialized
   const initializeMap = () => {
     if (!mapRef.current) {
@@ -34,6 +32,43 @@ const Map = ({
       L.tileLayer(TILE_LAYER_URL, {
         attribution: TILE_LAYER_ATTRIBUTION,
       }).addTo(mapInstance);
+
+      // Add grey-out effect for the entire map using an overlay
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        opacity: 1, // Grey out everything by setting opacity to 0.5
+      }).addTo(mapInstance);
+
+      // Fetch the GeoJSON file and add it to the map
+      fetch("/VTData.geojson")
+        .then((response) => response.json()) // Parse the GeoJSON file
+        .then((geojsonData) => {
+          // Add the GeoJSON data to the map
+
+          L.geoJSON(geojsonData, {
+            style: (feature) => ({
+              fillOpacity: 0.1,
+              color: "darkgreen",
+              weight: 2,
+            })
+          }).addTo(mapInstance);
+        })
+        .catch((error) => console.error("Error loading GeoJSON file:", error));
+
+        // Fetch the GeoJSON file and add it to the map
+      fetch("/NHData.geojson")
+      .then((response) => response.json()) // Parse the GeoJSON file
+      .then((geojsonData) => {
+        // Add the GeoJSON data to the map
+
+        L.geoJSON(geojsonData, {
+          style: (feature) => ({
+            fillOpacity: 0.1,
+            color: "darkRed",
+            weight: 2,
+          })
+        }).addTo(mapInstance);
+      })
+      .catch((error) => console.error("Error loading GeoJSON file:", error));
     }
   };
 

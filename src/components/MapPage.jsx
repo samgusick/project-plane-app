@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import { Helmet } from "react-helmet";
 import L from "leaflet";
 import Map from "./Map";
@@ -55,6 +55,7 @@ const MapPage = () => {
       if (APIFailed) {
         setAPIFailed(false);
       }
+      console.log(data);
       setPlaneData(data);
       setNextDataUpdateTime(new Date(Date.now() + updateInterval));
     }
