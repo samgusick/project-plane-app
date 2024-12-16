@@ -43,9 +43,9 @@ const MapPage = () => {
     iconAnchor: [42, 32.5],
   });
 
-  const updateInterval = 30000;
+  const updateInterval = 20000;
   // Fetch data with polling
-  const data = usePolling(fetchOpenSkyData, 30000);
+  const data = usePolling(fetchOpenSkyData, 20000);
 
   // Update plane data and countdown timer
   useEffect(() => {
