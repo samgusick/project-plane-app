@@ -144,9 +144,10 @@ const MapPage = () => {
         zIndex: 1000,
         height: "80px",
         width: "100%",
-        textAlign: "center",
+        textAlign: "center"
       }}>
-        
+      
+      
       <img src="/planesOverLogo.svg" height={"100%"}/>
       </Paper>
       <Map
@@ -196,7 +197,7 @@ const MapPage = () => {
           <img
             src={planeClickedImg}
             alt="Click a plane to start"
-            style={{ maxWidth: "100%", maxHeight: "100%" }}
+            width={"320px"}
           />
         </Paper>
       )}

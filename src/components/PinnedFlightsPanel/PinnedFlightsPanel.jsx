@@ -1,11 +1,7 @@
 import React from "react";
 import Switch from "@mui/material/Switch";
 import PushPinIcon from "@mui/icons-material/PushPin";
-import {
-  FormControlLabel,
-  Paper,
-  Typography,
-} from "@mui/material";
+import { FormControlLabel, Paper, Typography } from "@mui/material";
 import List from "@mui/material/List";
 import { PlaneListItem } from "../PlaneListItem";
 
@@ -18,9 +14,7 @@ const PinnedFlightsList = ({
   setSelectedMarker,
 }) => {
   return (
-    <Paper
-      className="pinnedFlightsPanel"
-    >
+    <Paper className="pinnedFlightsPanel" style={{}}>
       {pinnedFlights.length > 0 ? (
         <>
           <Typography variant="h6" style={{ marginBottom: "10px" }}>
@@ -30,13 +24,19 @@ const PinnedFlightsList = ({
           <FormControlLabel
             control={
               <Switch
-                sx={{
-                  '& .Mui-checked': {
-                    color: 'green', // Checked thumb color
-                  },
-                  '& .Mui-checked + .MuiSwitch-track': {
-                    backgroundColor: '#4caf50', // Checked track color
-                  },
+              sx={{
+                "& .MuiSwitch-thumb": {
+                  color: "green", // Default thumb color
+                },
+                "& .MuiSwitch-track": {
+                  backgroundColor: "lightgreen", // Default track color
+                },
+                "&.Mui-checked .MuiSwitch-thumb": {
+                  color: "darkgreen", // Checked thumb color
+                },
+                "& .Mui-checked + .MuiSwitch-track": {
+                  backgroundColor: "green", // Checked track color
+                },
               }}
                 onChange={() => {
                   setShowPinnedFlightsOnly((prevValue) => !prevValue);
@@ -46,12 +46,15 @@ const PinnedFlightsList = ({
             label="Pinned Flights Only"
           />
 
-          <div
-            style={{
-              overflowY: "auto", // Make this section scrollable
-            }}
-          >
-            <List sx={{ maxHeight: "30vh", padding: 0}}>
+          <div>
+            <List
+              sx={{
+                padding: 0,
+                margin: 0,
+                maxHeight: "254px",
+                overflow: "auto",
+              }}
+            >
               {pinnedFlights.map((plane) => (
                 <PlaneListItem
                   key={plane.icao24}

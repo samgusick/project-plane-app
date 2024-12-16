@@ -20,7 +20,7 @@ td {
 } */
 
 
-.selectedFlightPanel {
+/* .selectedFlightPanel {
   position: fixed;
   bottom: 25px;
   left: 50px;
@@ -28,9 +28,9 @@ td {
   padding: 20px;
   width: 340px;
   overflow: hidden;
-}
+} */
 
-.countdownPanel {
+/* .countdownPanel {
   position: fixed;
   z-index: 1000;
   text-align: center;
@@ -65,7 +65,7 @@ td {
 
   .pinnedFlightsPanel {
     position: fixed;
-    top: 0px;
+    top: 100px;
     left: 0px;
     z-index: 1000;
     padding: 20px;
@@ -78,6 +78,7 @@ td {
     visibility: hidden;
   }
 }
+
 
 @media (max-height: 850px) {
   .pinnedFlightsPanel {
@@ -105,8 +106,116 @@ td {
     bottom: -100px;
     left: -100px;
   }
+} */
+
+@media (min-width: 769px) {
+  .selectedFlightPanel {
+    position: fixed;
+    bottom: 0px;
+    min-width: 320px;
+    z-index: 1000;
+    padding: 20px;
+    transform: scale(0.9);
+    overflow: hidden;
+  }
+
+  .pinnedFlightsPanel {
+    position: fixed;
+    top: 75px;
+    min-width: 320px;
+    height: 350px;
+    z-index: 1000;
+    padding: 20px;
+    transform: scale(0.9);
+    overflow: hidden;
+  }
+
+  .countdownPanel {
+    visibility: hidden;
+  }
 }
 
+@media (max-width: 768px) {
+  .selectedFlightPanel {
+    position: fixed;
+    bottom: -30px;
+    min-width: 320px;
+    left: -8%;
+    z-index: 1000;
+    padding: 20px;
+    transform: scale(0.6);
+    overflow: hidden;
+  }
+
+  .pinnedFlightsPanel {
+    position: fixed;
+    top: 15px;
+    min-width: 320px;
+    height: 350px;
+    left: -8%;
+    z-index: 1000;
+    padding: 20px;
+    transform: scale(0.6);
+    overflow: hidden;
+  }
+  .countdownPanel {
+    visibility: hidden;
+  }
+}
+
+@media (max-width: 425px) {
+  .selectedFlightPanel {
+    position: fixed;
+    bottom: -45px;
+    min-width: 320px;
+    width: 100%;
+    left: -6%;
+    z-index: 1000;
+    padding: 20px;
+    transform: scale(0.5);
+    overflow: hidden;
+  }
+
+  .pinnedFlightsPanel {
+    position: fixed;
+    top: 0px;
+    min-width: 320px;
+    height: 350px;
+    width: 100%;
+    left: -6%;
+    z-index: 1000;
+    padding: 20px;
+    transform: scale(0.5);
+    overflow: hidden;
+  }
+
+  .countdownPanel {
+    visibility: hidden;
+  }
+}
+
+@media (max-height: 820px) {
+  .selectedFlightPanel {
+    position: fixed;
+    bottom: -45px;
+    z-index: 1000;
+    transform: scale(0.5);
+    overflow: hidden;
+  }
+
+  .pinnedFlightsPanel {
+    position: fixed;
+    top: 0px;
+    height: 350px;
+    z-index: 1000;
+    transform: scale(0.5);
+    overflow: hidden;
+  }
+
+  .countdownPanel {
+    visibility: hidden;
+  }
+}
 
 
 
