@@ -1,5 +1,6 @@
 import React from "react";
 import { Paper, Typography } from "@mui/material";
+import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 
 const ErrorPopup = ({}) => {
   return (
@@ -25,10 +26,13 @@ const ErrorPopup = ({}) => {
         left: "50%",
         padding: "1rem",
         transform: "translate(-50%, -50%)",
+        width: "450px",
         zIndex: 1000, // Ensures it appears on top of other elements
+        textAlign: "center"
       }}>
-        <Typography variant="h3">API Limit Hit</Typography>
-        <Typography variant="h6">Check back tommorow</Typography>
+        <WarningAmberIcon fontSize="large"/>
+        <Typography variant="h3" marginBottom={"15px"} marginTop={"15px"}>API Limit Hit</Typography>
+        <Typography variant="h6">OpenSky users get 4000 API credits per day. Comeback tommorrow and try again.</Typography>
       </Paper>
     </div>
   );
