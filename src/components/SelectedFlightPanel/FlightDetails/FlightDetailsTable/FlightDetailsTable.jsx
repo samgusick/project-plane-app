@@ -1,5 +1,5 @@
 import React from "react";
-import { FlightDetailsTableRows } from "./FlightDetailsTableRows.js";
+import { FlightDetailsTableRows } from "./FlightDetailsTableRows";
 import {
   Table,
   TableBody,

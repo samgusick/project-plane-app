@@ -8,81 +8,87 @@ import ErrorPopup from "./ErrorPopup";
 import { usePolling } from "./APIPollingHook";
 import { fetchOpenSkyData } from "./fetchOpenSkyData";
 import betaLogoShadow from "../images/beta_air_llc_logo_shadow.png";
-import betaLogoOrange from "../images/beta_air_llc_logo_shadow_orange.png";
-import { Typography } from "@mui/material";
-import { Paper } from "@mui/material";
+import betaLogoBlue from "../images/beta_air_llc_logo_shadow_orange.png";
+import { Typography, Paper } from "@mui/material";
 import planeClickedImg from "../images/planeClickedImg.png";
 import Countdown from "./UpdateCountdown/Countdown";
 
 export const defaultMapCenter = [44.0, -72.7];
 
 const MapPage = () => {
+  // State variables
   const [selectedMarker, setSelectedMarker] = useState(null);
   const [pinnedFlights, setPinnedFlights] = useState([]);
-  const [loadFlights, setLoadFlights] = useState(true);
   const [planeData, setPlaneData] = useState(null);
-  const [cachedPinnedPlaneData, setCachedPinnedPlaneData] = useState([]); // new state for cached data
+  const [cachedPinnedPlaneData, setCachedPinnedPlaneData] = useState([]);
   const [isFirstPlaneClicked, setIsFirstPlaneClicked] = useState(false);
   const [showPinnedFlightsOnly, setShowPinnedFlightsOnly] = useState(false);
   const [nextDataUpdateTime, setNextDataUpdateTime] = useState(null);
+  const [APIFailed, setAPIFailed] = useState(false);
+  // Refs
+  const markersRef = useRef({});
+  const mapRef = useRef(null);
 
-  const markersRef = useRef({}); // Use an object to track markers by icao24
-
+  // Icons for map markers
   const greyIcon = L.icon({
-    iconUrl: betaLogoShadow, // Ensure this variable is defined
+    iconUrl: betaLogoShadow,
     iconSize: [84, 65],
     iconAnchor: [42, 32.5],
   });
 
-  const orangeIcon = L.icon({
-    iconUrl: betaLogoOrange, // Ensure this variable is defined
+  const blueIcon = L.icon({
+    iconUrl: betaLogoBlue,
     iconSize: [84, 65],
     iconAnchor: [42, 32.5],
   });
 
+  const updateInterval = 15000;
+  // Fetch data with polling
   const data = usePolling(fetchOpenSkyData, 15000);
 
+  // Update plane data and countdown timer
   useEffect(() => {
-    setPlaneData(data);
-    const now = new Date();
-    const time15SecondsLater = new Date(now.getTime() + 15 * 1000);
-    setNextDataUpdateTime(time15SecondsLater);
+    if (data === "error") {
+      setAPIFailed(true);
+      
+    } else {
+      if (APIFailed) {
+        setAPIFailed(false);
+      }
+      setPlaneData(data);
+      setNextDataUpdateTime(new Date(Date.now() + updateInterval));
+    }
   }, [data]);
 
+  // Handle first plane click
   useEffect(() => {
     if (selectedMarker && !isFirstPlaneClicked) {
       setIsFirstPlaneClicked(true);
     }
   }, [selectedMarker]);
 
+  // Cache pinned flights' data
   useEffect(() => {
     if (pinnedFlights && planeData) {
       setCachedPinnedPlaneData((prevCache) => {
-        // Update existing cached data and add new data
-        const updatedCache = pinnedFlights.map((icao) => {
-          // Find the latest plane data for the pinned flight
-          const latestPlane = planeData.find((plane) => plane.icao24 === icao);
-
-          // Check if it's already in the cache
-          const cachedPlane = prevCache.find((plane) => plane.icao24 === icao);
-
-          // Return the latest plane data if found, otherwise keep the cached one
-          return latestPlane || cachedPlane;
-        });
-
-        const UpdatedCacheAfterFilter = updatedCache.filter(Boolean);
+        const updatedCache = pinnedFlights
+          .map(
+            (icao) =>
+              planeData.find((plane) => plane.icao24 === icao) ||
+              prevCache.find((plane) => plane.icao24 === icao)
+          )
+          .filter(Boolean);
 
         if (updatedCache.length === 0) {
           setShowPinnedFlightsOnly(false);
         }
-        // Filter out any cached planes that are no longer in pinnedFlights
-        return UpdatedCacheAfterFilter; // Ensure no null or undefined values
+
+        return updatedCache;
       });
     }
   }, [pinnedFlights, planeData]);
 
-  const mapRef = useRef(null);
-
+  // Initialize map
   useEffect(() => {
     if (!mapRef.current) {
       const mapInstance = L.map("map", {
@@ -92,49 +98,49 @@ const MapPage = () => {
         doubleClickZoom: false,
         zoomControl: false,
         scrollWheelZoom: false,
-        
       });
-      
-      mapInstance.zoomControl.remove();
-
-      mapRef.current = mapInstance;
 
       L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
         attribution:
           '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
       }).addTo(mapInstance);
+
+      mapRef.current = mapInstance;
     }
   }, []);
 
+  // Selected plane data
   const selectedPlaneData =
-    planeData && selectedMarker
-      ? planeData.find((plane) => plane.icao24 === selectedMarker)
-      : null;
+    planeData?.find((plane) => plane.icao24 === selectedMarker) || null;
 
   const cachedSelectedPlaneData =
-    cachedPinnedPlaneData && selectedMarker
-      ? cachedPinnedPlaneData.find((plane) => plane.icao24 === selectedMarker)
-      : null;
+    cachedPinnedPlaneData?.find((plane) => plane.icao24 === selectedMarker) ||
+    null;
 
   return (
     <div style={{ height: "100vh", width: "100vw", position: "relative" }}>
+      {/* Helmet for loading Leaflet styles and scripts */}
       <Helmet>
         <link
           rel="stylesheet"
           href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
           integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
-          crossorigin=""
+          crossOrigin=""
         />
         <script
           src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
           integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
-          crossorigin=""
+          crossOrigin=""
         ></script>
       </Helmet>
-      <Countdown futureTime={nextDataUpdateTime}/>
+
+      {/* Countdown Timer */}
+      <Countdown futureTime={nextDataUpdateTime} />
+
+      {/* Map Component */}
       <Map
         greyIcon={greyIcon}
-        orangeIcon={orangeIcon}
+        blueIcon={blueIcon}
         planeData={showPinnedFlightsOnly ? cachedPinnedPlaneData : planeData}
         mapRef={mapRef}
         setSelectedMarker={setSelectedMarker}
@@ -142,7 +148,9 @@ const MapPage = () => {
         selectedMarker={selectedMarker}
         pinnedFlights={pinnedFlights}
       />
-      {cachedPinnedPlaneData && (
+
+      {/* Pinned Flights Panel */}
+      {
         <PinnedFlightsPanel
           setSelectedMarker={setSelectedMarker}
           pinnedFlights={cachedPinnedPlaneData}
@@ -153,16 +161,14 @@ const MapPage = () => {
           setShowPinnedFlightsOnly={setShowPinnedFlightsOnly}
           showPinnedFlightsOnly={showPinnedFlightsOnly}
         />
-      )}
+      }
+
+      {/* Selected Flight Panel */}
       {isFirstPlaneClicked ? (
         selectedMarker && (
           <SelectedFlightPanel
             setSelectedMarker={setSelectedMarker}
-            selectedMarker={
-              cachedSelectedPlaneData
-                ? cachedSelectedPlaneData
-                : selectedPlaneData
-            }
+            selectedMarker={cachedSelectedPlaneData || selectedPlaneData}
             setPinnedFlights={setPinnedFlights}
             setCachedPinnedPlaneData={setCachedPinnedPlaneData}
             pinnedFlights={cachedPinnedPlaneData}
@@ -172,24 +178,19 @@ const MapPage = () => {
       ) : (
         <Paper
           className="selectedFlightPanel"
-          style={
-            {
-              textAlign: "center"
-            }
-          }
+          style={{ textAlign: "center" }}
           elevation={4}
         >
           <Typography variant="h6">Select a Plane to Start!</Typography>
           <img
             src={planeClickedImg}
-            style={{
-              maxWidth: "100%",
-              maxHeight: "100%",
-            }}
-          ></img>
+            alt="Click a plane to start"
+            style={{ maxWidth: "100%", maxHeight: "100%" }}
+          />
         </Paper>
       )}
-      {!loadFlights && <ErrorPopup />}
+
+      {APIFailed && <ErrorPopup />}
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import { FlightDetailsTable } from './FlightDetailsTable/FlightDetailsTable.js';
+import { FlightDetailsTable } from './FlightDetailsTable/FlightDetailsTable';
 import React from "react";
 import planeImage from "../../../images/beta_air_llc_logo.png"
 import { useEffect, useState } from "react";
