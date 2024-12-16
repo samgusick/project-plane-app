@@ -139,6 +139,16 @@ const MapPage = () => {
       {/* <Countdown futureTime={nextDataUpdateTime} /> */}
 
       {/* Map Component */}
+      <Paper sx={{
+        position: "absolute",
+        zIndex: 1000,
+        height: "80px",
+        width: "100%",
+        textAlign: "center",
+      }}>
+        
+      <img src="/planesOverLogo.svg" height={"100%"}/>
+      </Paper>
       <Map
         unfilledPlaneIcon={unfilledPlaneIcon}
         filledPlaneIcon={filledPlaneIcon}
