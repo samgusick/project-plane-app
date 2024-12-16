@@ -31,13 +31,13 @@ const MapPage = () => {
 
 
   // Icons for map markers
-  const greyIcon = L.icon({
+  const unfilledPlaneIcon = L.icon({
     iconUrl: betaLogoShadow,
     iconSize: [84, 65],
     iconAnchor: [42, 32.5],
   });
 
-  const blueIcon = L.icon({
+  const filledPlaneIcon = L.icon({
     iconUrl: betaLogoBlue,
     iconSize: [84, 65],
     iconAnchor: [42, 32.5],
@@ -136,12 +136,12 @@ const MapPage = () => {
       </Helmet>
 
       {/* Countdown Timer */}
-      <Countdown futureTime={nextDataUpdateTime} />
+      {/* <Countdown futureTime={nextDataUpdateTime} /> */}
 
       {/* Map Component */}
       <Map
-        greyIcon={greyIcon}
-        blueIcon={blueIcon}
+        unfilledPlaneIcon={unfilledPlaneIcon}
+        filledPlaneIcon={filledPlaneIcon}
         planeData={showPinnedFlightsOnly ? cachedPinnedPlaneData : planeData}
         mapRef={mapRef}
         setSelectedMarker={setSelectedMarker}

@@ -46,7 +46,6 @@ export function PinSelectedFlight({
 
   return (
     <IconButton
-      color={isPinned ? "primary" : "default"} // Conditional color based on isPinned
       aria-label="toggle-pin"
       onClick={handleTogglePinnedFlights}
       edge={edgeType ? edgeType : false}
@@ -54,6 +53,7 @@ export function PinSelectedFlight({
         position: positionType,
         top: topPosition,
         left: leftPosition,
+        color: isPinned ? "green" : "default"
       }}
     >
       <PushPinIcon />

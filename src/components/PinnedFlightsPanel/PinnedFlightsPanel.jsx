@@ -30,6 +30,14 @@ const PinnedFlightsList = ({
           <FormControlLabel
             control={
               <Switch
+                sx={{
+                  '& .Mui-checked': {
+                    color: 'green', // Checked thumb color
+                  },
+                  '& .Mui-checked + .MuiSwitch-track': {
+                    backgroundColor: '#4caf50', // Checked track color
+                  },
+              }}
                 onChange={() => {
                   setShowPinnedFlightsOnly((prevValue) => !prevValue);
                 }}
