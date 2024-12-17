@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useMemo } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Helmet } from "react-helmet";
 import L from "leaflet";
 import Map from "./Map";
@@ -11,7 +11,6 @@ import betaLogoShadow from "../images/beta_air_llc_logo_shadow.png";
 import betaLogoBlue from "../images/beta_air_llc_logo_shadow_orange.png";
 import { Typography, Paper } from "@mui/material";
 import planeClickedImg from "../images/planeClickedImg.png";
-import Countdown from "./UpdateCountdown/Countdown";
 
 export const defaultMapCenter = [44.0, -72.7];
 
@@ -105,6 +104,7 @@ const MapPage = () => {
         attribution:
           '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
       }).addTo(mapInstance);
+
 
       mapRef.current = mapInstance;
     }

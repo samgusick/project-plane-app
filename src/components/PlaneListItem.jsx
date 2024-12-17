@@ -1,16 +1,10 @@
 import React from "react";
 import {
   ListItem,
-  ListItemButton,
-  ListItemAvatar,
-  ListItemText,
   Avatar,
   Box,
-  ListItemIcon,
-  Grid2,
   Button,
   Typography,
-  Grid,
 } from "@mui/material";
 
 import { PinSelectedFlight } from "./SelectedFlightPanel/PinSelectedFlight";

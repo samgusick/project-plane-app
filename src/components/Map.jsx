@@ -33,6 +33,13 @@ const Map = ({
       });
       mapRef.current = mapInstance;
 
+      // Add custom-positioned zoom control
+      L.control
+        .zoom({
+          position: "bottomright", // Custom position: 'topleft', 'topright', 'bottomleft', 'bottomright'
+        })
+        .addTo(mapInstance);
+
       L.tileLayer(TILE_LAYER_URL, {
         attribution: TILE_LAYER_ATTRIBUTION,
       }).addTo(mapInstance);
@@ -101,7 +108,9 @@ const Map = ({
     const newPosition = { lat: latitude, lng: longitude };
 
     if (!updatedMarkers[icao24] && isPointInVermont(latitude, longitude)) {
-      const newMarker = L.marker([latitude, longitude], { icon: unfilledPlaneIcon })
+      const newMarker = L.marker([latitude, longitude], {
+        icon: unfilledPlaneIcon,
+      })
         .addTo(mapRef.current)
         .on("click", () => setSelectedMarker(icao24))
         .on("mouseover", () => newMarker.setIcon(filledPlaneIcon))
