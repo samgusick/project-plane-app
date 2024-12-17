@@ -35,7 +35,7 @@ const PinnedFlightsList = ({
                   color: "darkgreen", // Checked thumb color
                 },
                 "& .Mui-checked + .MuiSwitch-track": {
-                  backgroundColor: "green", // Checked track color
+                  backgroundColor: "green !important", // Checked track color
                 },
               }}
                 onChange={() => {

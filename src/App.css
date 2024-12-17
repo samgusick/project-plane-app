@@ -1,11 +1,7 @@
 td {
-  /* font-size: small; */
   text-align: left;
 }
 
-/* h1 {
-  font-size: medium;
-} */
 
 #flightDetailsTable {
   margin: auto;
@@ -14,99 +10,6 @@ td {
 #findFlightButton {
   margin: 10px;
 }
-
-/* .pinnedFlightsPanelPaper {
-  border: black solid 1px;
-} */
-
-
-/* .selectedFlightPanel {
-  position: fixed;
-  bottom: 25px;
-  left: 50px;
-  z-index: 1000;
-  padding: 20px;
-  width: 340px;
-  overflow: hidden;
-} */
-
-/* .countdownPanel {
-  position: fixed;
-  z-index: 1000;
-  text-align: center;
-  right: 50px;
-  bottom: 50px;
-  padding: 10px;
-  width: 200px;
-}
-
-.pinnedFlightsPanel {
-  position: fixed;
-  top: 100px;
-  left: 50px;
-  z-index: 1000;
-  padding: 20px;
-  width: 340px;
-  overflow: hidden;
-}
-
-
-@media (max-width: 850px) {
-  .selectedFlightPanel {
-    position: fixed;
-    bottom: 0px;
-    left: 0px;
-    z-index: 1000;
-    padding: 20px;
-    width: 340px;
-    transform: scale(0.8);
-    overflow: hidden;
-  }
-
-  .pinnedFlightsPanel {
-    position: fixed;
-    top: 100px;
-    left: 0px;
-    z-index: 1000;
-    padding: 20px;
-    width: 340px;
-    transform: scale(0.8);
-    overflow: hidden;
-  }
-
-  .countdownPanel {
-    visibility: hidden;
-  }
-}
-
-
-@media (max-height: 850px) {
-  .pinnedFlightsPanel {
-    transform: scale(0.6);
-    top: 80px;
-    left: -60px;
-  }
-
-  .selectedFlightPanel {
-    transform: scale(0.6);
-    bottom: -40px;
-    left: -60px;
-  }
-}
-
-@media (max-height: 550px) {
-  .pinnedFlightsPanel {
-    transform: scale(0.4);
-    top: 60px;
-    left: -100px;
-  }
-
-  .selectedFlightPanel {
-    transform: scale(0.4);
-    bottom: -100px;
-    left: -100px;
-  }
-} */
 
 @media (min-width: 770px) {
   .selectedFlightPanel {
@@ -243,6 +146,51 @@ td {
     z-index: 1000;
     overflow: hidden;
     transform: scale(0.8);
+  }
+
+  .countdownPanel {
+    visibility: hidden;
+  }
+}
+
+@media (min-height: 768px) {
+  .selectedFlightPanel {
+    position: fixed;
+    z-index: 1000;
+    overflow: hidden;
+    transform: scale(0.8);
+  }
+
+  .pinnedFlightsPanel {
+    position: fixed;
+    top: 8%;
+    height: 350px;
+    z-index: 1000;
+    overflow: hidden;
+    transform: scale(0.8);
+  }
+
+  .countdownPanel {
+    visibility: hidden;
+  }
+}
+
+@media (min-height: 1000px) {
+  .selectedFlightPanel {
+    bottom: 2%;
+    position: fixed;
+    z-index: 1000;
+    transform: scale(1);
+    overflow: hidden;
+  }
+
+  .pinnedFlightsPanel {
+    position: fixed;
+    top: 8%;
+    height: 350px;
+    z-index: 1000;
+    transform: scale(1);
+    overflow: hidden;
   }
 
   .countdownPanel {
