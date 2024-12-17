@@ -61,7 +61,7 @@ export function FlightDetailsTableRows({ marker, ContactTimeDifference }) {
       key === "sensors" ||
       key === "on Ground" ||
       key === "time Position" || 
-      key === "callsign"
+      key === "icao24"
     ) {
       return;
     } else {

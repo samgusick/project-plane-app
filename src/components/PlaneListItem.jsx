@@ -40,15 +40,17 @@ export const PlaneListItem = ({
       <Button 
         sx={{
           width: "100%",
-          backgroundColor: "green"
+          backgroundColor: "green",
+          textTransform:"none"
         }}
         variant="contained"
         onClick={() => {
+          console.log(plane.icao24);
           setSelectedMarker(plane.icao24);
           mapRef.current.setView([plane.latitude, plane.longitude]);
         }}
       >
-        <Typography>{plane.callsign || "Callsign N/A"}</Typography>
+        <Typography>{plane.icao24}</Typography>
       </Button>
 
       <Box width={"30px"} height={"30px"} marginRight={"15px"} marginLeft={"15px"}>
