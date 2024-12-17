@@ -140,9 +140,9 @@ td {
 @media (max-width: 768px) {
   .selectedFlightPanel {
     position: fixed;
-    bottom: -4%;
+    bottom: 0;
     min-width: 320px;
-    left: -5%;
+    left: -0%;
     z-index: 1000;
     padding: 20px;
     transform: scale(0.7);
@@ -151,10 +151,10 @@ td {
 
   .pinnedFlightsPanel {
     position: fixed;
-    top: 6%;
+    top: 0;
     min-width: 320px;
     height: 350px;
-    left: -5%;
+    left: 0%;
     z-index: 1000;
     padding: 20px;
     transform: scale(0.7);
@@ -168,7 +168,7 @@ td {
 @media (max-width: 425px) {
   .selectedFlightPanel {
     position: fixed;
-    bottom: -45px;
+    bottom: 0;
     min-width: 320px;
     width: 100%;
     left: -6%;
