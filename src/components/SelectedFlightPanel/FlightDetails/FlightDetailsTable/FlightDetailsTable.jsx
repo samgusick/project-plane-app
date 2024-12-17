@@ -17,7 +17,6 @@ export function FlightDetailsTable({
         styleOverrides: {
           root: {
             padding: "1px", // Apply custom padding globally
-            fontSize: "small"
           },
         },
       },
