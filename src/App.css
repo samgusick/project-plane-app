@@ -111,7 +111,7 @@ td {
 @media (min-width: 769px) {
   .selectedFlightPanel {
     position: fixed;
-    bottom: 20px;
+    bottom: 0px;
     min-width: 320px;
     left: 1%;
     z-index: 1000;
@@ -197,10 +197,10 @@ td {
   }
 }
 
-@media (max-height: 820px) {
+@media (max-height: 767px) {
   .selectedFlightPanel {
     position: fixed;
-    bottom: -2%; 
+
     z-index: 1000;
     overflow: hidden;
     transform: scale(0.8);
@@ -221,7 +221,7 @@ td {
   }
 }
 
-@media (min-height: 821px) {
+@media (min-height: 768px) {
   .selectedFlightPanel {
     position: fixed;
     z-index: 1000;
