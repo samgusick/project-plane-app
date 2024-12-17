@@ -5,7 +5,8 @@ Planes Over Vermont is a simple interface and dashboard application for viewing 
 1. A navigatable map for viewing airplanes at their current locations (Leaflet)
 2. An overlayed UI for navigation and data display (React)
 3. a favorites list of planes
-4. leave annotative notes for planes
+~~4. leave annotative notes for planes~~
+4. a panel with live details of the currently selected planes
 
 ## GOALS
 
@@ -23,16 +24,16 @@ Planes Over Vermont is a simple interface and dashboard application for viewing 
 -  [ x ] Tidy up pinned flight details cosmetically to improve labels, visual appeal, aesthetics and make the data more informed 
 - [ x ] Replace pin icon with a better one on the flight details popup
 - [ x ] Properly style both buttons on top of the flight details popup
-- [ ] Add a button option on the pinned flights to optionally pan the map over to the selected plane
+- [ x ] Add a button option on the pinned flights to optionally pan the map over to the selected plane
 - [ x ] create option on the plane data pop up for users to add notes
 - [ x ] plane should be deselected if it flys out of range
-- [ ] create proper boundaries for Vermont with the planes
+- [ x ] create proper boundaries for Vermont with the planes
 - [ x ] Error Handling for failing to reach the API
 
 ## STRETCH GOALS
 
-- [ ] create UI elements for the user to change how often (in seconds) the map is updated
-- [ ] update plane location on map based on direction and velocity until the next update happens
+~~- [ ] create UI elements for the user to change how often (in seconds) the map is updated~~
+- [ x ] update plane location on map based on direction and velocity until the next update happens
 
 ## KNOWN BUGS
 - [ x ] Plane data popup doesn't go away when plane is deselected
