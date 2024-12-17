@@ -111,24 +111,24 @@ td {
 @media (min-width: 770px) {
   .selectedFlightPanel {
     position: fixed;
-    bottom: 0px;
+    bottom: -14px;
     min-width: 320px;
     left: 1%;
     z-index: 1000;
     padding: 20px;
-    transform: scale(0.9);
+    transform: scale(0.8);
     overflow: hidden;
   }
 
   .pinnedFlightsPanel {
     position: fixed;
-    top: 100px;
+    top: 60px;
     min-width: 320px;
     left: 1%;
     height: 350px;
     z-index: 1000;
     padding: 20px;
-    transform: scale(0.9);
+    transform: scale(0.8);
     overflow: hidden;
   }
 
