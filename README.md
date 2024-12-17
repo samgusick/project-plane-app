@@ -8,6 +8,14 @@ Planes Over Vermont is a simple interface and dashboard application for viewing 
 ~~4. leave annotative notes for planes~~
 4. a panel with live details of the currently selected planes
 
+## PROTOTYPES
+
+Version 1:
+![alt text](/Prototype1.jpg)
+
+Version 2:
+![alt text](/Prototype2.jpg)
+
 ## GOALS
 
 - [ x ] Add the leaflet map
