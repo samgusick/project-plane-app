@@ -108,7 +108,7 @@ td {
   }
 } */
 
-@media (min-width: 769px) {
+@media (min-width: 780px) {
   .selectedFlightPanel {
     position: fixed;
     bottom: 0px;
@@ -137,7 +137,7 @@ td {
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 769px) {
   .selectedFlightPanel {
     position: fixed;
     bottom: 0;
