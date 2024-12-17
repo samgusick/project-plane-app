@@ -36,7 +36,7 @@ const Map = ({
       L.tileLayer(TILE_LAYER_URL, {
         attribution: TILE_LAYER_ATTRIBUTION,
       }).addTo(mapInstance);
-
+      console.log(`${process.env.PUBLIC_URL}/VTData.geojson`);
       const response = await fetch(`${process.env.PUBLIC_URL}/VTData.geojson`);
       const geojsonData = await response.json();
       vermontGeoJSONRef.current = geojsonData;
