@@ -191,6 +191,9 @@ td {
     overflow: hidden;
     visibility: hidden
   }
+  .pinIconButton {
+    visibility: hidden;
+  }
 
   .countdownPanel {
     visibility: hidden;
@@ -213,6 +216,10 @@ td {
     z-index: 1000;
     overflow: hidden;
     transform: scale(0.8);
+    visibility: hidden;
+  }
+
+  .pinIconButton {
     visibility: hidden;
   }
 

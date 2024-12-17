@@ -45,7 +45,8 @@ export function PinSelectedFlight({
   }, [pinnedFlights, markerToPin]); // Dependency array updated
 
   return (
-    <IconButton
+    <IconButton 
+      className="pinIconButton"
       aria-label="toggle-pin"
       onClick={handleTogglePinnedFlights}
       edge={edgeType ? edgeType : false}
