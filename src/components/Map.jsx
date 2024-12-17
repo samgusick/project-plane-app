@@ -3,7 +3,6 @@ import L from "leaflet";
 import "leaflet-rotatedmarker";
 import { defaultMapCenter } from "./MapPage";
 import * as turf from "@turf/turf";
-import VTData from "../data/VTData.geojson";
 
 const TILE_LAYER_URL = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
 const TILE_LAYER_ATTRIBUTION =
@@ -37,7 +36,7 @@ const Map = ({
       L.tileLayer(TILE_LAYER_URL, {
         attribution: TILE_LAYER_ATTRIBUTION,
       }).addTo(mapInstance);
-      const response = await fetch(VTData);
+      const response = await fetch("/VTdata.geojson");
       const geojsonData = await response.json();
       vermontGeoJSONRef.current = geojsonData;
 
