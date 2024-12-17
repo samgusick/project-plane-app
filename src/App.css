@@ -111,8 +111,9 @@ td {
 @media (min-width: 769px) {
   .selectedFlightPanel {
     position: fixed;
-    bottom: 0px;
+    bottom: 20px;
     min-width: 320px;
+    left: 1%;
     z-index: 1000;
     padding: 20px;
     transform: scale(0.9);
@@ -121,8 +122,9 @@ td {
 
   .pinnedFlightsPanel {
     position: fixed;
-    top: 75px;
+    top: 100px;
     min-width: 320px;
+    left: 1%;
     height: 350px;
     z-index: 1000;
     padding: 20px;
@@ -138,24 +140,24 @@ td {
 @media (max-width: 768px) {
   .selectedFlightPanel {
     position: fixed;
-    bottom: -30px;
+    bottom: -4%;
     min-width: 320px;
-    left: -8%;
+    left: -5%;
     z-index: 1000;
     padding: 20px;
-    transform: scale(0.6);
+    transform: scale(0.7);
     overflow: hidden;
   }
 
   .pinnedFlightsPanel {
     position: fixed;
-    top: 15px;
+    top: 6%;
     min-width: 320px;
     height: 350px;
-    left: -8%;
+    left: -5%;
     z-index: 1000;
     padding: 20px;
-    transform: scale(0.6);
+    transform: scale(0.7);
     overflow: hidden;
   }
   .countdownPanel {
@@ -187,6 +189,7 @@ td {
     padding: 20px;
     transform: scale(0.5);
     overflow: hidden;
+    visibility: hidden
   }
 
   .countdownPanel {
@@ -197,19 +200,20 @@ td {
 @media (max-height: 820px) {
   .selectedFlightPanel {
     position: fixed;
-    bottom: -45px;
+    bottom: -2%; 
     z-index: 1000;
-    transform: scale(0.5);
     overflow: hidden;
+    transform: scale(0.8);
   }
 
   .pinnedFlightsPanel {
     position: fixed;
-    top: 0px;
+    top: 8%;
     height: 350px;
     z-index: 1000;
-    transform: scale(0.5);
     overflow: hidden;
+    transform: scale(0.8);
+    visibility: hidden;
   }
 
   .countdownPanel {
@@ -217,7 +221,27 @@ td {
   }
 }
 
+@media (min-height: 821px) {
+  .selectedFlightPanel {
+    position: fixed;
+    z-index: 1000;
+    overflow: hidden;
+    transform: scale(0.8);
+  }
 
+  .pinnedFlightsPanel {
+    position: fixed;
+    top: 8%;
+    height: 350px;
+    z-index: 1000;
+    overflow: hidden;
+    transform: scale(0.8);
+  }
+
+  .countdownPanel {
+    visibility: hidden;
+  }
+}
 
 
 
