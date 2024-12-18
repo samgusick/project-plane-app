@@ -49,6 +49,7 @@ const MapPage = () => {
 
   // Update plane data and countdown timer
   useEffect(() => {
+    console.log(data);
     if (data === "error") {
       setAPIFailed(true);
       
@@ -142,7 +143,7 @@ const MapPage = () => {
       <Paper sx={{
         position: "absolute",
         zIndex: 1000,
-        height: "80px",
+        height: "100px",
         width: "100%",
         textAlign: "center"
       }}>

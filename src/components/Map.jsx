@@ -47,6 +47,11 @@ const Map = ({
           weight: 2,
         }),
       }).addTo(mapInstance);
+
+      L.control.zoom({
+        position: "bottomright"
+      })
+      .addTo(mapInstance);
     }
   };
 
