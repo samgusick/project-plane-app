@@ -33,13 +33,6 @@ const Map = ({
       });
       mapRef.current = mapInstance;
 
-      // Add custom-positioned zoom control
-      L.control
-        .zoom({
-          position: "bottomright", // Custom position: 'topleft', 'topright', 'bottomleft', 'bottomright'
-        })
-        .addTo(mapInstance);
-
       L.tileLayer(TILE_LAYER_URL, {
         attribution: TILE_LAYER_ATTRIBUTION,
       }).addTo(mapInstance);

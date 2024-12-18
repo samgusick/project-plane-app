@@ -22,7 +22,7 @@ const MapPage = () => {
   const [cachedPinnedPlaneData, setCachedPinnedPlaneData] = useState([]);
   const [isFirstPlaneClicked, setIsFirstPlaneClicked] = useState(false);
   const [showPinnedFlightsOnly, setShowPinnedFlightsOnly] = useState(false);
-  const [nextDataUpdateTime, setNextDataUpdateTime] = useState(null);
+  // const [nextDataUpdateTime, setNextDataUpdateTime] = useState(null);
   const [APIFailed, setAPIFailed] = useState(false);
   // Refs
   const markersRef = useRef({});
@@ -42,7 +42,6 @@ const MapPage = () => {
     iconAnchor: [42, 32.5],
   });
 
-  const updateInterval = 20000;
   // Fetch data with polling
   const data = usePolling(fetchOpenSkyData, 20000);
 
@@ -57,9 +56,9 @@ const MapPage = () => {
         setAPIFailed(false);
       }
       setPlaneData(data);
-      setNextDataUpdateTime(new Date(Date.now() + updateInterval));
+      // setNextDataUpdateTime(new Date(Date.now() + updateInterval));
     }
-  }, [data]);
+  }, [data, APIFailed]);
 
   // Handle first plane click
   useEffect(() => {
@@ -149,7 +148,7 @@ const MapPage = () => {
       }}>
       
       
-      <img src="/planesOverLogo.svg" height={"100%"}/>
+      <img src="/planesOverLogo.svg" alt="planes over Vermont Logo" height={"100%"}/>
       </Paper>
       <Map
         unfilledPlaneIcon={unfilledPlaneIcon}
