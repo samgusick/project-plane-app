@@ -1,5 +1,4 @@
 import "./App.css";
-import { Helmet } from "react-helmet";
 import MapPage from "./components/MapPage";
 
 function App() {
